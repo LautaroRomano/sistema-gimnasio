@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String?
+  isAdmin   Boolean   @default(false)
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+}
+
+model Routines {
+  id        Int                @id @default(autoincrement())
+  name      String
+  date      DateTime?
+  success   Boolean            @default(false)
+  createdAt DateTime           @default(now())
+  updatedAt DateTime?          @updatedAt
+  deletedAt DateTime?
+  exercises RoutineExercises[]
+}
+
+model RoutineExercises {
+  id          Int       @id @default(autoincrement())
+  name        String
+  img         String?
+  description String
+  type        String
+  value       String
+  repetitions Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+  routine     Routines  @relation(fields: [routineId], references: [id])
+  routineId   Int
+}
+
+model ExercisesConfig {
+  id          Int       @id @default(autoincrement())
+  name        String
+  img         String?
+  description String
+  type        String
+  value       String
+  repetitions Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deletedAt   DateTime?
+}

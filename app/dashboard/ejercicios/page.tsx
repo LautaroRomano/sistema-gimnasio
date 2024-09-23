@@ -10,8 +10,9 @@ import {
   Button,
 } from "@nextui-org/react";
 import { CiEdit } from "react-icons/ci";
-import { IoMdAdd, IoMdTimer } from "react-icons/io";
+import { IoMdTimer } from "react-icons/io";
 import { IoReloadOutline } from "react-icons/io5";
+import CreateModal from '@/components/dashboard/ejercicios/CreateModal'
 
 export default function DashboardPage() {
   return (
@@ -20,7 +21,7 @@ export default function DashboardPage() {
       <div className="flex flex-col gap-1 w-screen h-full">
         <div className="flex justify-center items-center gap-8 bg-backgroundComponents rounded-md">
           <h1 className="text-lg py-4">Listado de Ejercicios</h1>
-          <Button size="sm" color="primary" startContent={<IoMdAdd />}>Agregar nuevo</Button>
+          <CreateModal/>
         </div>
 
         <div className="flex justify-between p-4 gap-4 h-full w-full flex-wrap">
