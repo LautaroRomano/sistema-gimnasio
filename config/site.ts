@@ -9,12 +9,12 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Usuarios",
-      href: "/users",
-    },
-    {
       label: "Imagenes",
       href: "/dashboard/imagenes",
+    },
+    {
+      label: "Usuarios",
+      href: "/usuarios",
     },
   ],
   navMenuItems: [
@@ -23,12 +23,12 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Usuarios",
-      href: "/users",
-    },
-    {
       label: "Imagenes",
       href: "/dashboard/imagenes",
+    },
+    {
+      label: "Usuarios",
+      href: "/usuarios",
     },
   ],
   drawItems: [
@@ -41,12 +41,12 @@ export const siteConfig = {
       href: "/dashboard/ejercicios",
     },
     {
-      label: "Usuarios",
-      href: "/dashboard/users",
-    },
-    {
       label: "Imagenes",
       href: "/dashboard/imagenes",
+    },
+    {
+      label: "Usuarios",
+      href: "/dashboard/usuarios",
     },
   ],
   drawMenuItems: [
@@ -59,12 +59,12 @@ export const siteConfig = {
       href: "/dashboard/ejercicios",
     },
     {
-      label: "Usuarios",
-      href: "/dashboard/users",
-    },
-    {
       label: "Imagenes",
       href: "/dashboard/imagenes",
+    },
+    {
+      label: "Usuarios",
+      href: "/dashboard/usuarios",
     },
   ],
   links: {

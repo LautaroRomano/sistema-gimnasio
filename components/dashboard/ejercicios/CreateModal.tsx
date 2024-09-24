@@ -15,13 +15,14 @@ import { ExerciseType } from "@/types";
 import { create, getImages } from "@/app/actions/exercicesConfig";
 
 const initData: ExerciseType = {
-  id: null,
+  id: 0,
   name: "",
   description: "",
   repetitions: 1,
   type: "veces",
   value: "1",
   img: "",
+  createdAt: new Date()
 };
 
 type ErrorData = string;

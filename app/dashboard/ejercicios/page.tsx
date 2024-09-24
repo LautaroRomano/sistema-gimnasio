@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Drawer } from "@/components/dashboard/drawer";
 import {
   Card,
@@ -24,6 +24,10 @@ export default function DashboardPage() {
     if(res.error) return console.log(res.error);
     if(res.success) setData(res.success)
   }
+
+  useEffect(()=>{
+    getData(null);
+  },[])
 
   return (
     <div className="flex gap-1 bg-backgroundBack w-screen h-screen">
