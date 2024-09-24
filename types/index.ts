@@ -1,9 +1,8 @@
 import { SVGProps } from "react";
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
-  size?: number;
+  size: number | null;
 };
-
 
 export type ExerciseType = {
   id: number;
@@ -25,7 +24,7 @@ export type UserType = {
   name?: string | null;
   isAdmin: boolean;
   password: string;
-  phone?: string;
+  phone?: string| null;
   createdAt: Date;
   updatedAt?: Date | null;
   deletedAt?: Date | null;
@@ -58,7 +57,6 @@ export type RoutineExerciseType = {
   routineId: number;
   routine: RoutineType;
 };
-
 
 // Images table type
 export type ImageType = {
