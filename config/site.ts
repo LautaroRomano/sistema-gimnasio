@@ -11,7 +11,11 @@ export const siteConfig = {
     {
       label: "Usuarios",
       href: "/users",
-    }
+    },
+    {
+      label: "Imagenes",
+      href: "/dashboard/imagenes",
+    },
   ],
   navMenuItems: [
     {
@@ -21,7 +25,11 @@ export const siteConfig = {
     {
       label: "Usuarios",
       href: "/users",
-    }
+    },
+    {
+      label: "Imagenes",
+      href: "/dashboard/imagenes",
+    },
   ],
   drawItems: [
     {
@@ -35,7 +43,11 @@ export const siteConfig = {
     {
       label: "Usuarios",
       href: "/dashboard/users",
-    }
+    },
+    {
+      label: "Imagenes",
+      href: "/dashboard/imagenes",
+    },
   ],
   drawMenuItems: [
     {
@@ -49,7 +61,11 @@ export const siteConfig = {
     {
       label: "Usuarios",
       href: "/dashboard/users",
-    }
+    },
+    {
+      label: "Imagenes",
+      href: "/dashboard/imagenes",
+    },
   ],
   links: {
     github: "https://github.com/nextui-org/nextui",
