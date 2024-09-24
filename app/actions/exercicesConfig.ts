@@ -13,19 +13,38 @@ export const create = async ({
   repetitions,
 }: ExerciseType) => {
   try {
-    prisma.exercisesConfig.create({
+    await prisma.exercisesConfig.create({
       data: {
         name,
         img,
         description,
         type,
         value,
-        repetitions,
+        repetitions:repetitions*1,
       },
     });
     return { success: true };
   } catch (error) {
     console.log("🚀 ~ create ~ error:", error);
+    return { error: "Ocurrio un error" };
+  }
+};
+
+export const getExercises = async (search: string | null) => {
+  try {
+    const data = await prisma.exercisesConfig.findMany({
+      where: search
+        ? {
+            name: {
+              contains: search,
+              mode: "insensitive", // Ignora mayúsculas y minúsculas
+            },
+          }
+        : {},
+    });
+    return { success: data };
+  } catch (error) {
+    console.log("🚀 ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
@@ -49,9 +68,18 @@ export const uploadImg = async ({
   }
 };
 
-export const getImages = async () => {
+export const getImages = async (search: string | null) => {
   try {
-    const images = await prisma.images.findMany();
+    const images = await prisma.images.findMany({
+      where: search
+        ? {
+            name: {
+              contains: search,
+              mode: "insensitive", // Ignora mayúsculas y minúsculas
+            },
+          }
+        : {},
+    });
     return { success: images };
   } catch (error) {
     console.log("🚀 ~ error:", error);

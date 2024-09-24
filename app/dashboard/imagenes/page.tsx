@@ -2,8 +2,6 @@
 import { Drawer } from "@/components/dashboard/drawer";
 import { Card, CardFooter, Image, Button } from "@nextui-org/react";
 import { CiEdit } from "react-icons/ci";
-import { IoMdTimer } from "react-icons/io";
-import { IoReloadOutline } from "react-icons/io5";
 import CreateModal from "@/components/dashboard/imagenes/CreateModal";
 import { useEffect, useState } from "react";
 import { getImages } from "@/app/actions/exercicesConfig";
@@ -24,7 +22,7 @@ export default function ImagesPage() {
   console.log("🚀 ~ ImagesPage ~ data:", data);
 
   const getData = async () => {
-    const res = await getImages();
+    const res = await getImages(null);
     if (res.error) return console.log("Ocurrio un error!");
     if (!res.success) return 0;
     setData(res.success);

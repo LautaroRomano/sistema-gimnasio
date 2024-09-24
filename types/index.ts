@@ -7,7 +7,7 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 export type ExerciseType = {
   id:number | null,
   name:string,
-  img:string,
+  img:string | null,
   description:string,
   type:string,
   value:string,
