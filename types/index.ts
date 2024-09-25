@@ -51,11 +51,11 @@ export type RoutineExerciseType = {
   type: string;
   value: string;
   repetitions: number;
+  success: boolean;
   createdAt: Date;
   updatedAt?: Date | null;
   deletedAt?: Date | null;
   routineId: number;
-  routine: RoutineType;
 };
 
 // Images table type

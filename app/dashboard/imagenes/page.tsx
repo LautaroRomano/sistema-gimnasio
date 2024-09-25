@@ -40,7 +40,7 @@ export default function ImagesPage() {
           <CreateModal refresh={getData} />
         </div>
 
-        <div className="flex justify-between p-4 gap-4 h-full w-full flex-wrap">
+        <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap">
           {data.map((item, i) => {
             return (
               <Card
