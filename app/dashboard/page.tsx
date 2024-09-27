@@ -103,7 +103,7 @@ export default function DashboardPage() {
                 />
               )}
           {routine?.exercises[0]&&
-            <TableRoutines data={routine.exercises.map(({id,img,name,type,value,repetitions,description,success})=>({id,gif:img,nombre:name,cantidad:`${value} ${type}`,Repeticiones:repetitions,descripcion:description,terminado:success}))}/>
+            <TableRoutines data={routine.exercises.map(({id,img,name,type,value,series,description,success})=>({id,gif:img,nombre:name,cantidad:`${value} ${type}`,Series:series,descripcion:description,terminado:success}))}/>
           }
             </div>
           )}

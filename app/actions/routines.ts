@@ -10,7 +10,7 @@ export const create = async ({
   description,
   type,
   value,
-  repetitions,
+  series,
 }: ExerciseType,routineId:number) => {
   try {
     await prisma.routineExercises.create({
@@ -20,7 +20,7 @@ export const create = async ({
         description,
         type,
         value,
-        repetitions:repetitions*1,
+        series:series*1,
         routineId
       },
     });

@@ -11,7 +11,7 @@ export type ExerciseType = {
   description: string;
   type: string;
   value: string;
-  repetitions: number;
+  series: number;
   createdAt: Date;
   updatedAt?: Date | null;
   deletedAt?: Date | null;
@@ -50,7 +50,7 @@ export type RoutineExerciseType = {
   description: string;
   type: string;
   value: string;
-  repetitions: number;
+  series: number;
   success: boolean;
   createdAt: Date;
   updatedAt?: Date | null;

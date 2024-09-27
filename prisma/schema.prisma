@@ -46,7 +46,7 @@ model RoutineExercises {
   description String
   type        String
   value       String
-  repetitions Int
+  series Int
   success     Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
@@ -62,7 +62,7 @@ model ExercisesConfig {
   description String
   type        String
   value       String
-  repetitions Int
+  series Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?

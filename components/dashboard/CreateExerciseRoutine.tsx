@@ -19,8 +19,8 @@ const initData: ExerciseType = {
   id: 0,
   name: "",
   description: "",
-  repetitions: 1,
-  type: "veces",
+  series: 1,
+  type: "repeticiones",
   value: "1",
   img: "",
   createdAt: new Date(),
@@ -115,7 +115,7 @@ export default function CreateExerciseRoutine({
                         onChange={handleChange}
                         className="outline-none border-0 bg-transparent text-default-400 text-small"
                       >
-                        <option value="veces">Veces</option>
+                        <option value="repeticiones">Repeticiones</option>
                         <option value="segundos">Segundos</option>
                         <option value="minutos">Minutos</option>
                       </select>
@@ -124,10 +124,10 @@ export default function CreateExerciseRoutine({
 
                   <Input
                     type="number"
-                    label="Repeticiones"
+                    label="Series"
                     variant="bordered"
-                    value={data.repetitions + ""}
-                    name="repetitions"
+                    value={data.series + ""}
+                    name="series"
                     min={1}
                     onChange={handleChange}
                   />

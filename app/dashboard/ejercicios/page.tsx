@@ -64,7 +64,7 @@ export default function DashboardPage() {
                         </div>
                         <div className="text-tiny flex gap-2">
                           <IoReloadOutline />
-                          {item.repetitions} rep
+                          {item.series}
                         </div>
                       </div>
                     </div>
