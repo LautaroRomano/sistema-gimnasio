@@ -211,7 +211,7 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Selecciona una imagen
+                Selecciona una plantilla
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-2">
@@ -234,10 +234,10 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
                             onClose();
                           }}
                         >
-                          <div className="flex">
+                          <div className="flex max-h-full">
                             <img
                               alt={exerc.name}
-                              className="object-contain"
+                              className="object-contain max-h-full"
                               src={exerc.img || ""}
                             />
                           </div>
