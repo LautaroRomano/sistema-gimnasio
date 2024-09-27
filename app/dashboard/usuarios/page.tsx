@@ -1,10 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Drawer } from "@/components/dashboard/drawer";
 import {
   Card,
   CardFooter,
-  Image,
   Button,
   CardBody,
   Spinner,
@@ -12,17 +10,19 @@ import {
 } from "@nextui-org/react";
 import { CiEdit } from "react-icons/ci";
 import { IoMdTimer } from "react-icons/io";
-import CreateModal from "@/components/dashboard/usuarios/CreateModal";
-import { UserType } from "@/types";
-import { getUsers } from "@/app/actions/users";
 import { IoMdCreate } from "react-icons/io";
 import { FaPlus } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 
+import { getUsers } from "@/app/actions/users";
+import { UserType } from "@/types";
+import CreateModal from "@/components/dashboard/usuarios/CreateModal";
+import { Drawer } from "@/components/dashboard/drawer";
+
 const initData: UserType[] = [];
-const searchUserInit : string | null = null
+const searchUserInit: string | null = null;
 
 export default function DashboardPage() {
   const [data, setData] = useState(initData);
@@ -32,8 +32,9 @@ export default function DashboardPage() {
   const getData = async (search: string | null) => {
     setLoading(true);
     const res = await getUsers(search);
+
     setLoading(false);
-    if (res.error) return console.log(res.error);
+    if (res.error) return 0;
     if (res.success) setData(res.success);
   };
 
@@ -49,18 +50,14 @@ export default function DashboardPage() {
           <h1 className="text-lg py-4">Listado de Usuarios</h1>
           <CreateModal refresh={getData} />
           <Input
-            placeholder="Nombre del usuario"
             className="absolute right-0 max-w-sm"
-            type="text"
-            onChange={({target})=>setSearchUser(target.value)}
-            value={searchUser||''}
             endContent={
               <div className="flex gap-2">
                 {searchUser && searchUser.length > 0 && (
                   <Button
-                    size="sm"
                     isIconOnly
                     className="rounded-full"
+                    size="sm"
                     onPress={() => {
                       setSearchUser(null);
                       getData(null);
@@ -78,6 +75,10 @@ export default function DashboardPage() {
                 </Button>
               </div>
             }
+            placeholder="Nombre del usuario"
+            type="text"
+            value={searchUser || ""}
+            onChange={({ target }) => setSearchUser(target.value)}
           />
         </div>
 
@@ -87,9 +88,13 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap">
-            {data.map((item, i) => {
+            {data.map((item) => {
               return (
-                <Card isFooterBlurred className="flex w-full max-w-sm h-64">
+                <Card
+                  key={item.id}
+                  isFooterBlurred
+                  className="flex w-full max-w-sm h-64"
+                >
                   <CardBody>
                     <div className="flex flex-col gap-2 p-2">
                       <p className="text-lg ">{item.name}</p>
@@ -121,8 +126,8 @@ export default function DashboardPage() {
                     <div className="flex w-full justify-between">
                       <Button
                         as={"a"}
-                        href={`/dashboard?user=${item.id}`}
                         className="flex"
+                        href={`/dashboard?user=${item.id}`}
                         radius="full"
                         size="sm"
                         startContent={<IoMdTimer />}

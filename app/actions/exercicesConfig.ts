@@ -1,6 +1,7 @@
 "use server";
-import { ExerciseType } from "@/types";
 import { PrismaClient } from "@prisma/client";
+
+import { ExerciseType } from "@/types";
 
 const prisma = new PrismaClient();
 
@@ -20,12 +21,12 @@ export const create = async ({
         description,
         type,
         value,
-        series:series*1,
+        series: series * 1,
       },
     });
+
     return { success: true };
   } catch (error) {
-    console.log("🚀 ~ create ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
@@ -42,9 +43,9 @@ export const getExercises = async (search: string | null) => {
           }
         : {},
     });
+
     return { success: data };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
@@ -64,8 +65,7 @@ export const uploadImg = async ({
 
     return { success: true };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
-    return { error: 'Ocurrio un error' };
+    return { error: "Ocurrio un error" };
   }
 };
 
@@ -81,9 +81,9 @@ export const getImages = async (search: string | null) => {
           }
         : {},
     });
+
     return { success: images };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };

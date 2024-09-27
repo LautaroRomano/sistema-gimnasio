@@ -11,6 +11,7 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
+
 import { ExerciseType } from "@/types";
 import { create, getImages } from "@/app/actions/exercicesConfig";
 
@@ -22,7 +23,7 @@ const initData: ExerciseType = {
   type: "repeticiones",
   value: "1",
   img: "",
-  createdAt: new Date()
+  createdAt: new Date(),
 };
 
 type ErrorData = string;
@@ -37,6 +38,7 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
     target,
   }: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = target;
+
     setData((p) => ({ ...p, [name]: value }));
   };
 
@@ -44,9 +46,10 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
     if (!data.name || data.name.length === 0) return setError("name");
     if (!data.img || data.img.length === 0) return setError("img");
     const res = await create(data);
-    if (res.error) return console.log(res.error);
+
+    if (res.error) return 0;
     if (res.success) {
-      setData(initData)
+      setData(initData);
       refresh();
     }
   };
@@ -54,8 +57,8 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
   return (
     <>
       <Button
-        size="sm"
         color="primary"
+        size="sm"
         startContent={<IoMdAdd />}
         onPress={onOpen}
       >
@@ -69,15 +72,15 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
                 Crear ejercicio
               </ModalHeader>
               <ModalBody>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+                <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
                   <Input
-                    type="text"
-                    label="Nombre"
-                    variant="bordered"
-                    isInvalid={error === "name"}
                     errorMessage="Debe completar este campo"
-                    value={data.name}
+                    isInvalid={error === "name"}
+                    label="Nombre"
                     name="name"
+                    type="text"
+                    value={data.name}
+                    variant="bordered"
                     onChange={handleChange}
                   />
                   <SelectImgModal
@@ -86,59 +89,59 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
                     }
                   />
                   <Textarea
-                    type="text"
                     label="Descripcion"
-                    variant="bordered"
-                    value={data.description}
                     name="description"
+                    type="text"
+                    value={data.description}
+                    variant="bordered"
                     onChange={handleChange}
                   />
 
                   <Input
-                    type="number"
-                    label="valor"
-                    variant="bordered"
-                    labelPlacement="outside"
-                    value={data.value}
-                    name="value"
-                    onChange={handleChange}
                     endContent={
                       <select
+                        className="outline-none border-0 bg-transparent text-default-400 text-small"
                         name="type"
                         value={data.type}
                         onChange={handleChange}
-                        className="outline-none border-0 bg-transparent text-default-400 text-small"
                       >
                         <option value="repeticiones">Repeticiones</option>
                         <option value="segundos">Segundos</option>
                         <option value="minutos">Minutos</option>
                       </select>
                     }
+                    label="valor"
+                    labelPlacement="outside"
+                    name="value"
+                    type="number"
+                    value={data.value}
+                    variant="bordered"
+                    onChange={handleChange}
                   />
 
                   <Input
-                    type="number"
                     label="Series"
-                    variant="bordered"
-                    value={data.series + ""}
-                    name="series"
                     min={1}
+                    name="series"
+                    type="number"
+                    value={data.series + ""}
+                    variant="bordered"
                     onChange={handleChange}
                   />
                 </form>
               </ModalBody>
               <ModalFooter>
                 <Button
-                  size="sm"
                   color="danger"
+                  size="sm"
                   variant="light"
                   onPress={onClose}
                 >
                   Cancelar
                 </Button>
                 <Button
-                  size="sm"
                   color="primary"
+                  size="sm"
                   onPress={() => {
                     handleSubmit();
                     onClose();
@@ -182,12 +185,14 @@ function SelectImgModal({ setImg }: { setImg: Function }) {
 
   const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { value } = target;
+
     getData(value);
   };
 
   const getData = async (search: string | null) => {
     const res = await getImages(search);
-    if (res.error) return console.log(res.error);
+
+    if (res.error) return 0;
     if (!res.success) return 0;
     setData(res.success);
   };
@@ -200,9 +205,11 @@ function SelectImgModal({ setImg }: { setImg: Function }) {
     <>
       <div className="flex gap-2 justify-between border border-[#35353B] py-2 px-4 items-center">
         <p className="text-sm">
-          {selected.name.length === 0 ? "Ninguna Imagen seleccionada" : selected.name}
+          {selected.name.length === 0
+            ? "Ninguna Imagen seleccionada"
+            : selected.name}
         </p>
-        <Button variant="bordered" onPress={onOpen} size="sm">
+        <Button size="sm" variant="bordered" onPress={onOpen}>
           Seleccionar
         </Button>
       </div>
@@ -217,17 +224,18 @@ function SelectImgModal({ setImg }: { setImg: Function }) {
               <ModalBody>
                 <div className="flex flex-col gap-2">
                   <Input
+                    label="Buscar"
+                    name="search"
                     size="sm"
                     type="text"
-                    label="Buscar"
                     variant="bordered"
-                    name="search"
                     onChange={handleChange}
                   />
                   <div className="flex flex-col gap-2 h-[34rem] overflow-y-scroll">
                     {data.map((image) => {
                       return (
-                        <div
+                        <button
+                          key={image.id}
                           className="flex p-2 justify-between max-h-24 hover:bg-gray-800 cursor-pointer gap-4"
                           onClick={() => {
                             setImg(image.imageUrl);
@@ -237,15 +245,15 @@ function SelectImgModal({ setImg }: { setImg: Function }) {
                         >
                           <div className="flex">
                             <img
-                              src={image.imageUrl || ""}
                               alt={image.name}
                               className="object-contain"
+                              src={image.imageUrl || ""}
                             />
                           </div>
                           <div className="flex">
                             <p className="text-right text-sm">{image.name}</p>
                           </div>
-                        </div>
+                        </button>
                       );
                     })}
                   </div>
@@ -253,8 +261,8 @@ function SelectImgModal({ setImg }: { setImg: Function }) {
               </ModalBody>
               <ModalFooter>
                 <Button
-                  size="sm"
                   color="danger"
+                  size="sm"
                   variant="light"
                   onPress={onClose}
                 >

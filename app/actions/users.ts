@@ -1,7 +1,8 @@
 "use server";
-import { UserType } from "@/types";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+
+import { UserType } from "@/types";
 
 const prisma = new PrismaClient();
 
@@ -14,6 +15,7 @@ export const createUser = async ({
   try {
     if (!name) return { error: "Debe ingresar el nombre" };
     const hashedPassword = await bcrypt.hash(password, 10);
+
     await prisma.users.create({
       data: {
         name,
@@ -22,9 +24,9 @@ export const createUser = async ({
         password: hashedPassword,
       },
     });
+
     return { success: true };
   } catch (error) {
-    console.log("🚀 ~ create ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
@@ -41,19 +43,38 @@ export const getUsers = async (search: string | null) => {
           }
         : {},
     });
+
     return { success: data };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
 
-export const getAUserRoutine = async (user_id: number, date: Date) => { 
+export const getAUserRoutine = async (user_id: number, date: Date) => {
   try {
     // Obtener la fecha en UTC (sin el desfase de la zona horaria local)
-    const startOfDay = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0));
+    const startOfDay = new Date(
+      Date.UTC(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+        0,
+        0,
+        0,
+      ),
+    );
 
-    const endOfDay = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 23, 59, 59, 999));
+    const endOfDay = new Date(
+      Date.UTC(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+        23,
+        59,
+        59,
+        999,
+      ),
+    );
 
     // Buscar la rutina en el rango de la fecha (en UTC)
     const data = await prisma.routines.findMany({
@@ -69,6 +90,7 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
 
     // Si no existe, crear una nueva rutina para esa fecha
     let routine = data[0];
+
     if (!routine) {
       routine = await prisma.routines.create({
         data: {
@@ -88,8 +110,6 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
 
     return { success: { ...routine, exercises } };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: "Ocurrió un error" };
   }
 };
-

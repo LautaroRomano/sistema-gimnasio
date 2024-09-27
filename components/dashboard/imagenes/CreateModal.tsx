@@ -10,6 +10,7 @@ import {
   Input,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
+
 import { uploadImg } from "@/app/actions/exercicesConfig";
 import { uploadFile } from "@/lib/firebase";
 
@@ -29,22 +30,26 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
 
   const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = target;
+
     setData((p) => ({ ...p, [name]: value }));
   };
 
   const handleChangeImg = async ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { name, files } = target;
+
     if (!files || !files[0]) return setError("img");
     const url = await uploadFile(files[0]);
+
     setData((p) => ({ ...p, [name]: url }));
   };
 
   const handleSubmit = async () => {
     if (!data.name || data.name.length === 0) return setError("name");
     const res = await uploadImg(data);
-    if (res.error) return console.log(res.error);
+
+    if (res.error) return 0;
     if (res.success) {
-      setData(initData)
+      setData(initData);
       refresh();
     }
   };
@@ -52,8 +57,8 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
   return (
     <>
       <Button
-        size="sm"
         color="primary"
+        size="sm"
         startContent={<IoMdAdd />}
         onPress={onOpen}
       >
@@ -67,41 +72,41 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
                 Crear imagen
               </ModalHeader>
               <ModalBody>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+                <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
                   <Input
-                    type="text"
-                    label="Nombre"
-                    variant="bordered"
-                    isInvalid={error === "name"}
                     errorMessage="Debe completar este campo"
-                    value={data.name}
+                    isInvalid={error === "name"}
+                    label="Nombre"
                     name="name"
+                    type="text"
+                    value={data.name}
+                    variant="bordered"
                     onChange={handleChange}
                   />
                   <Input
-                    type="file"
-                    label="Imagen"
-                    variant="bordered"
-                    isInvalid={error === "img"}
-                    errorMessage="Debe ingresar una imagen"
-                    name="img"
                     accept="image/*"
+                    errorMessage="Debe ingresar una imagen"
+                    isInvalid={error === "img"}
+                    label="Imagen"
+                    name="img"
+                    type="file"
+                    variant="bordered"
                     onChange={handleChangeImg}
                   />
                 </form>
               </ModalBody>
               <ModalFooter>
                 <Button
-                  size="sm"
                   color="danger"
+                  size="sm"
                   variant="light"
                   onPress={onClose}
                 >
                   Cancelar
                 </Button>
                 <Button
-                  size="sm"
                   color="primary"
+                  size="sm"
                   onPress={() => {
                     handleSubmit();
                     onClose();

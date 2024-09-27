@@ -12,6 +12,7 @@ import {
   Divider,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
+
 import { ExerciseType } from "@/types";
 import { getExercises, getImages } from "@/app/actions/exercicesConfig";
 import { create } from "@/app/actions/routines";
@@ -45,6 +46,7 @@ export default function CreateExerciseRoutine({
     target,
   }: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = target;
+
     setData((p) => ({ ...p, [name]: value }));
   };
 
@@ -52,7 +54,8 @@ export default function CreateExerciseRoutine({
     if (!data.name || data.name.length === 0) return setError("name");
     if (!data.img || data.img.length === 0) return setError("img");
     const res = await create(data, routineId);
-    if (res.error) return console.log(res.error);
+
+    if (res.error) return 0;
     if (res.success) {
       setData(initData);
       refresh();
@@ -62,8 +65,8 @@ export default function CreateExerciseRoutine({
   return (
     <>
       <Button
-        size="sm"
         color="primary"
+        size="sm"
         startContent={<IoMdAdd />}
         onPress={onOpen}
       >
@@ -77,82 +80,82 @@ export default function CreateExerciseRoutine({
                 Crear ejercicio
               </ModalHeader>
               <ModalBody>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+                <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
                   <SelectPlantillaModal
-                    updateData={(newData:ExerciseType) =>
-                      setData((p) => newData)
+                    updateData={(newData: ExerciseType) =>
+                      setData(() => newData)
                     }
                   />
                   <Input
-                    type="text"
-                    label="Nombre"
-                    variant="bordered"
-                    isInvalid={error === "name"}
                     errorMessage="Debe completar este campo"
-                    value={data.name}
+                    isInvalid={error === "name"}
+                    label="Nombre"
                     name="name"
+                    type="text"
+                    value={data.name}
+                    variant="bordered"
                     onChange={handleChange}
                   />
                   <SelectImgModal
+                    imgSelected={!!data.img}
                     setImg={(urlImage: string) =>
                       setData((p) => ({ ...p, img: urlImage }))
                     }
-                    imgSelected={!!data.img}
                   />
                   <Textarea
-                    type="text"
                     label="Descripcion"
-                    variant="bordered"
-                    value={data.description}
                     name="description"
+                    type="text"
+                    value={data.description}
+                    variant="bordered"
                     onChange={handleChange}
                   />
 
                   <Input
-                    type="number"
-                    label="valor"
-                    variant="bordered"
-                    labelPlacement="outside"
-                    value={data.value}
-                    name="value"
-                    onChange={handleChange}
                     endContent={
                       <select
+                        className="outline-none border-0 bg-transparent text-default-400 text-small"
                         name="type"
                         value={data.type}
                         onChange={handleChange}
-                        className="outline-none border-0 bg-transparent text-default-400 text-small"
                       >
                         <option value="repeticiones">Repeticiones</option>
                         <option value="segundos">Segundos</option>
                         <option value="minutos">Minutos</option>
                       </select>
                     }
+                    label="valor"
+                    labelPlacement="outside"
+                    name="value"
+                    type="number"
+                    value={data.value}
+                    variant="bordered"
+                    onChange={handleChange}
                   />
 
                   <Input
-                    type="number"
                     label="Series"
-                    variant="bordered"
-                    value={data.series + ""}
-                    name="series"
                     min={1}
+                    name="series"
+                    type="number"
+                    value={data.series + ""}
+                    variant="bordered"
                     onChange={handleChange}
                   />
                 </form>
               </ModalBody>
               <ModalFooter>
                 <Button
-                  size="sm"
                   color="danger"
+                  size="sm"
                   variant="light"
                   onPress={onClose}
                 >
                   Cancelar
                 </Button>
                 <Button
-                  size="sm"
                   color="primary"
+                  size="sm"
                   onPress={() => {
                     handleSubmit();
                     onClose();
@@ -170,32 +173,21 @@ export default function CreateExerciseRoutine({
 }
 
 const initDataExercises: ExerciseType[] = [];
-const initExerciseSelected: ExerciseType = {
-  id: 0,
-  name: "",
-  description:'',
-  series:0,
-  type:'',
-  value:'0',
-  img:'',
-  deletedAt: null,
-  updatedAt: null,
-  createdAt: new Date(),
-};
 
 function SelectPlantillaModal({ updateData }: { updateData: Function }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [data, setData] = useState(initDataExercises);
-  const [selected, setSelected] = useState(initExerciseSelected);
 
   const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { value } = target;
+
     getData(value);
   };
 
   const getData = async (search: string | null) => {
     const res = await getExercises(search);
-    if (res.error) return console.log(res.error);
+
+    if (res.error) return 0;
     if (!res.success) return 0;
     setData(res.success);
   };
@@ -207,12 +199,12 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
   return (
     <>
       <div className="flex gap-2 justify-center w-full py-2 px-4 items-center">
-        <Button variant="bordered" onPress={onOpen} size="sm" color="primary">
+        <Button color="primary" size="sm" variant="bordered" onPress={onOpen}>
           Seleccionar desde una plantilla
         </Button>
       </div>
 
-      <Divider></Divider>
+      <Divider />
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
@@ -224,36 +216,35 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
               <ModalBody>
                 <div className="flex flex-col gap-2">
                   <Input
+                    label="Buscar"
+                    name="search"
                     size="sm"
                     type="text"
-                    label="Buscar"
                     variant="bordered"
-                    name="search"
                     onChange={handleChange}
                   />
                   <div className="flex flex-col gap-2 h-[34rem] overflow-y-scroll">
                     {data.map((exerc) => {
                       return (
-                        <div
+                        <button
                           key={exerc.id}
                           className="flex p-2 justify-between max-h-24 hover:bg-gray-800 cursor-pointer gap-4"
                           onClick={() => {
-                            updateData(exerc)
-                            setSelected(exerc);
+                            updateData(exerc);
                             onClose();
                           }}
                         >
                           <div className="flex">
                             <img
-                              src={exerc.img || ""}
                               alt={exerc.name}
                               className="object-contain"
+                              src={exerc.img || ""}
                             />
                           </div>
                           <div className="flex">
                             <p className="text-right text-sm">{exerc.name}</p>
                           </div>
-                        </div>
+                        </button>
                       );
                     })}
                   </div>
@@ -261,8 +252,8 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
               </ModalBody>
               <ModalFooter>
                 <Button
-                  size="sm"
                   color="danger"
+                  size="sm"
                   variant="light"
                   onPress={onClose}
                 >
@@ -276,7 +267,6 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
     </>
   );
 }
-
 
 type InitData = {
   id: number;
@@ -297,19 +287,28 @@ const initDataSelected: InitData = {
   updatedAt: null,
   createdAt: new Date(),
 };
-function SelectImgModal({ setImg,imgSelected }: { setImg: Function,imgSelected:boolean }) {
+
+function SelectImgModal({
+  setImg,
+  imgSelected,
+}: {
+  setImg: Function;
+  imgSelected: boolean;
+}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [data, setData] = useState(initDataImages);
   const [selected, setSelected] = useState(initDataSelected);
 
   const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { value } = target;
+
     getData(value);
   };
 
   const getData = async (search: string | null) => {
     const res = await getImages(search);
-    if (res.error) return console.log(res.error);
+
+    if (res.error) return 0;
     if (!res.success) return 0;
     setData(res.success);
   };
@@ -323,10 +322,12 @@ function SelectImgModal({ setImg,imgSelected }: { setImg: Function,imgSelected:b
       <div className="flex gap-2 justify-between border border-[#35353B] py-2 px-4 items-center">
         <p className="text-sm">
           {selected.name.length === 0
-            ? imgSelected ? "Imagen de plantilla" : "Ninguna Imagen seleccionada"
+            ? imgSelected
+              ? "Imagen de plantilla"
+              : "Ninguna Imagen seleccionada"
             : selected.name}
         </p>
-        <Button variant="bordered" onPress={onOpen} size="sm">
+        <Button size="sm" variant="bordered" onPress={onOpen}>
           Seleccionar
         </Button>
       </div>
@@ -341,17 +342,17 @@ function SelectImgModal({ setImg,imgSelected }: { setImg: Function,imgSelected:b
               <ModalBody>
                 <div className="flex flex-col gap-2">
                   <Input
+                    label="Buscar"
+                    name="search"
                     size="sm"
                     type="text"
-                    label="Buscar"
                     variant="bordered"
-                    name="search"
                     onChange={handleChange}
                   />
                   <div className="flex flex-col gap-2 h-[34rem] overflow-y-scroll">
                     {data.map((image) => {
                       return (
-                        <div
+                        <button
                           key={image.id}
                           className="flex p-2 justify-between max-h-24 hover:bg-gray-800 cursor-pointer gap-4"
                           onClick={() => {
@@ -362,15 +363,15 @@ function SelectImgModal({ setImg,imgSelected }: { setImg: Function,imgSelected:b
                         >
                           <div className="flex">
                             <img
-                              src={image.imageUrl || ""}
                               alt={image.name}
                               className="object-contain"
+                              src={image.imageUrl || ""}
                             />
                           </div>
                           <div className="flex">
                             <p className="text-right text-sm">{image.name}</p>
                           </div>
-                        </div>
+                        </button>
                       );
                     })}
                   </div>
@@ -378,8 +379,8 @@ function SelectImgModal({ setImg,imgSelected }: { setImg: Function,imgSelected:b
               </ModalBody>
               <ModalFooter>
                 <Button
-                  size="sm"
                   color="danger"
+                  size="sm"
                   variant="light"
                   onPress={onClose}
                 >

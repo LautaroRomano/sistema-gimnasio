@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -8,9 +8,9 @@ import {
   Button,
   useDisclosure,
   Input,
-  Textarea,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
+
 import { UserType } from "@/types";
 import { createUser } from "@/app/actions/users";
 
@@ -36,15 +36,17 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
     target,
   }: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = target;
+
     setData((p) => ({ ...p, [name]: value }));
   };
 
   const handleSubmit = async () => {
     if (!data.name || data.name.length === 0) return setError("name");
     const res = await createUser(data);
-    if (res.error) return console.log(res.error);
+
+    if (res.error) return 0;
     if (res.success) {
-      setData(initData)
+      setData(initData);
       refresh();
     }
   };
@@ -52,8 +54,8 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
   return (
     <>
       <Button
-        size="sm"
         color="primary"
+        size="sm"
         startContent={<IoMdAdd />}
         onPress={onOpen}
       >
@@ -67,43 +69,43 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
                 Crear usuario
               </ModalHeader>
               <ModalBody>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+                <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
                   <Input
-                    type="text"
-                    label="Nombre"
-                    variant="bordered"
+                    errorMessage="Debe completar este campo"
                     isInvalid={error === "name"}
-                    errorMessage="Debe completar este campo"
-                    value={data.name || ""}
+                    label="Nombre"
                     name="name"
+                    type="text"
+                    value={data.name || ""}
+                    variant="bordered"
                     onChange={handleChange}
                   />
                   <Input
-                    type="text"
-                    label="Email"
-                    variant="bordered"
+                    errorMessage="Debe completar este campo"
                     isInvalid={error === "email"}
-                    errorMessage="Debe completar este campo"
-                    value={data.email || ""}
+                    label="Email"
                     name="email"
-                    onChange={handleChange}
-                  />
-                  <Input
-                    type="password"
-                    label="Contraseña"
-                    isInvalid={error === "password"}
-                    errorMessage="Debe completar este campo"
-                    variant="bordered"
-                    value={data.password}
-                    name="password"
-                    onChange={handleChange}
-                  />
-                  <Input
                     type="text"
-                    label="Numero de telefono"
+                    value={data.email || ""}
                     variant="bordered"
-                    value={data.phone + ""}
+                    onChange={handleChange}
+                  />
+                  <Input
+                    errorMessage="Debe completar este campo"
+                    isInvalid={error === "password"}
+                    label="Contraseña"
+                    name="password"
+                    type="password"
+                    value={data.password}
+                    variant="bordered"
+                    onChange={handleChange}
+                  />
+                  <Input
+                    label="Numero de telefono"
                     name="phone"
+                    type="text"
+                    value={data.phone + ""}
+                    variant="bordered"
                     onChange={handleChange}
                   />
                   {/* <select
@@ -119,16 +121,16 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
               </ModalBody>
               <ModalFooter>
                 <Button
-                  size="sm"
                   color="danger"
+                  size="sm"
                   variant="light"
                   onPress={onClose}
                 >
                   Cancelar
                 </Button>
                 <Button
-                  size="sm"
                   color="primary"
+                  size="sm"
                   onPress={() => {
                     handleSubmit();
                     onClose();

@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Drawer } from "@/components/dashboard/drawer";
 import { Card, CardFooter, Image, Button, Spinner } from "@nextui-org/react";
 import { CiEdit } from "react-icons/ci";
 import { IoMdTimer } from "react-icons/io";
 import { IoReloadOutline } from "react-icons/io5";
+
+import { Drawer } from "@/components/dashboard/drawer";
 import CreateModal from "@/components/dashboard/ejercicios/CreateModal";
 import { ExerciseType } from "@/types";
 import { getExercises } from "@/app/actions/exercicesConfig";
@@ -18,8 +19,9 @@ export default function DashboardPage() {
   const getData = async (search: string | null) => {
     setLoading(true);
     const res = await getExercises(search);
+
     setLoading(false);
-    if (res.error) return console.log(res.error);
+    if (res.error) return 0;
     if (res.success) setData(res.success);
   };
 
@@ -41,9 +43,10 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap">
-            {data.map((item, i) => {
+            {data.map((item) => {
               return (
                 <Card
+                  key={item.id}
                   isFooterBlurred
                   className="flex w-full max-w-sm h-[300px] col-span-12 sm:col-span-7"
                 >

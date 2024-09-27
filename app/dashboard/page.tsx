@@ -1,21 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Drawer } from "@/components/dashboard/drawer";
 import {
   Card,
   CardFooter,
   Button,
   CardBody,
   DatePicker,
-  Spacer,
   Divider,
   Spinner,
 } from "@nextui-org/react";
 import { IoMdTimer } from "react-icons/io";
-import { RoutineType, UserType } from "@/types";
-import { getAUserRoutine, getUsers } from "@/app/actions/users";
 import { MdEmail } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
+
+import { RoutineType, UserType } from "@/types";
+import { getAUserRoutine, getUsers } from "@/app/actions/users";
+import { Drawer } from "@/components/dashboard/drawer";
 import TableRoutines from "@/components/dashboard/tableRoutines";
 import CreateExerciseRoutine from "@/components/dashboard/CreateExerciseRoutine";
 
@@ -35,24 +35,26 @@ export default function DashboardPage() {
     try {
       if (!userId) throw "Se nesecita un usuario";
       const res = await getAUserRoutine(userId, date || selectedDate);
+
       if (res.error) throw res.error;
       if (res.success) setRoutine(res.success);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
 
   const getUsersList = async (search: string | null) => {
     const res = await getUsers(search);
-    if (res.error) return console.log(res.error);
+
+    if (res.error) return 0;
     if (res.success) setUsers(res.success);
   };
 
   const getUserId = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get("user");
+
     if (id) setUserId(parseInt(id));
   };
 
@@ -80,20 +82,21 @@ export default function DashboardPage() {
           <div className="flex justify-center items-center my-4 relative">
             <div className="absolute left-4">
               <Button
-                startContent={<IoMdArrowRoundBack />}
                 as={"a"}
                 href="/dashboard"
+                startContent={<IoMdArrowRoundBack />}
               >
                 Volver
               </Button>
             </div>
             <DatePicker
-              label="Dia de entrenamiento"
               className="max-w-[284px]"
+              label="Dia de entrenamiento"
               onChange={({ day, month, year }) => {
                 const date = new Date();
+
                 date.setDate(day);
-                date.setMonth(month-1);
+                date.setMonth(month - 1);
                 date.setFullYear(year);
                 setSelectedDate(date);
               }}
@@ -115,24 +118,19 @@ export default function DashboardPage() {
               {routine?.exercises[0] && (
                 <TableRoutines
                   data={routine.exercises.map(
-                    ({
-                      img,
-                      name,
-                      type,
-                      value,
-                      series,
-                      description,
-                      success,
-                    },i) => ({
-                      id:i+1,
-                      orden:i+1,
+                    (
+                      { img, name, type, value, series, description, success },
+                      i,
+                    ) => ({
+                      id: i + 1,
+                      orden: i + 1,
                       gif: img,
                       nombre: name,
                       cantidad: `${value} ${type}`,
                       Series: series,
                       descripcion: description,
                       terminado: success,
-                    })
+                    }),
                   )}
                 />
               )}
@@ -154,9 +152,9 @@ export default function DashboardPage() {
           {users.map((item, i) => {
             return (
               <Card
+                key={i}
                 isFooterBlurred
                 className="flex w-full max-w-sm h-36"
-                key={i}
               >
                 <CardBody>
                   <div className="flex flex-col gap-2 p-2">
@@ -173,8 +171,8 @@ export default function DashboardPage() {
                   <div className="flex w-full justify-between">
                     <Button
                       as={"a"}
-                      href={`/dashboard?user=${item.id}`}
                       className="flex"
+                      href={`/dashboard?user=${item.id}`}
                       radius="full"
                       size="sm"
                       startContent={<IoMdTimer />}
