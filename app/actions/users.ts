@@ -48,16 +48,14 @@ export const getUsers = async (search: string | null) => {
   }
 };
 
-export const getAUserRoutine = async (user_id: number, date: Date) => {
+export const getAUserRoutine = async (user_id: number, date: Date) => { 
   try {
-    // Crear los límites de la fecha (desde las 00:00:00 hasta las 23:59:59)
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
+    // Obtener la fecha en UTC (sin el desfase de la zona horaria local)
+    const startOfDay = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0));
 
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
+    const endOfDay = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 23, 59, 59, 999));
 
-    // Buscar la rutina en el rango de la fecha
+    // Buscar la rutina en el rango de la fecha (en UTC)
     const data = await prisma.routines.findMany({
       where: {
         userId: user_id,

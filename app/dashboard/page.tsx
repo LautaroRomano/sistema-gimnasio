@@ -35,7 +35,6 @@ export default function DashboardPage() {
     try {
       if (!userId) throw "Se nesecita un usuario";
       const res = await getAUserRoutine(userId, date || selectedDate);
-      console.log("🚀 ~ getUserRoutine ~ res:", res)
       if (res.error) throw res.error;
       if (res.success) setRoutine(res.success);
       setLoading(false);
@@ -56,6 +55,10 @@ export default function DashboardPage() {
     const id = searchParams.get("user");
     if (id) setUserId(parseInt(id));
   };
+
+  useEffect(() => {
+    getUserRoutine();
+  }, [selectedDate]);
 
   useEffect(() => {
     getUsersList(null);
@@ -87,6 +90,13 @@ export default function DashboardPage() {
             <DatePicker
               label="Dia de entrenamiento"
               className="max-w-[284px]"
+              onChange={({ day, month, year }) => {
+                const date = new Date();
+                date.setDate(day);
+                date.setMonth(month-1);
+                date.setFullYear(year);
+                setSelectedDate(date);
+              }}
             />
           </div>
           <Divider />
@@ -102,9 +112,30 @@ export default function DashboardPage() {
                   routineId={routine?.id}
                 />
               )}
-          {routine?.exercises[0]&&
-            <TableRoutines data={routine.exercises.map(({id,img,name,type,value,series,description,success})=>({id,gif:img,nombre:name,cantidad:`${value} ${type}`,Series:series,descripcion:description,terminado:success}))}/>
-          }
+              {routine?.exercises[0] && (
+                <TableRoutines
+                  data={routine.exercises.map(
+                    ({
+                      id,
+                      img,
+                      name,
+                      type,
+                      value,
+                      series,
+                      description,
+                      success,
+                    }) => ({
+                      id,
+                      gif: img,
+                      nombre: name,
+                      cantidad: `${value} ${type}`,
+                      Series: series,
+                      descripcion: description,
+                      terminado: success,
+                    })
+                  )}
+                />
+              )}
             </div>
           )}
         </div>
@@ -122,7 +153,11 @@ export default function DashboardPage() {
         <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap">
           {users.map((item, i) => {
             return (
-              <Card isFooterBlurred className="flex w-full max-w-sm h-36" key={i}>
+              <Card
+                isFooterBlurred
+                className="flex w-full max-w-sm h-36"
+                key={i}
+              >
                 <CardBody>
                   <div className="flex flex-col gap-2 p-2">
                     <p className="text-lg ">{item.name}</p>
