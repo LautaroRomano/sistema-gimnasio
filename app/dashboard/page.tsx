@@ -116,7 +116,6 @@ export default function DashboardPage() {
                 <TableRoutines
                   data={routine.exercises.map(
                     ({
-                      id,
                       img,
                       name,
                       type,
@@ -124,8 +123,9 @@ export default function DashboardPage() {
                       series,
                       description,
                       success,
-                    }) => ({
-                      id,
+                    },i) => ({
+                      id:i+1,
+                      orden:i+1,
                       gif: img,
                       nombre: name,
                       cantidad: `${value} ${type}`,
