@@ -55,7 +55,7 @@ export const siteConfig = {
       href: "/dashboard",
     },
     {
-      label: "Ejercicios",
+      label: "Plantilla Ejercicios",
       href: "/dashboard/ejercicios",
     },
     {

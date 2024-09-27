@@ -44,6 +44,7 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
     const res = await createUser(data);
     if (res.error) return console.log(res.error);
     if (res.success) {
+      setData(initData)
       refresh();
     }
   };

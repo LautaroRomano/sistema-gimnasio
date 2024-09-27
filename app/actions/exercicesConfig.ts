@@ -65,6 +65,7 @@ export const uploadImg = async ({
     return { success: true };
   } catch (error) {
     console.log("🚀 ~ error:", error);
+    return { error: 'Ocurrio un error' };
   }
 };
 

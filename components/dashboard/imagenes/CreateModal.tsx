@@ -8,7 +8,6 @@ import {
   Button,
   useDisclosure,
   Input,
-  Textarea,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
 import { uploadImg } from "@/app/actions/exercicesConfig";
@@ -43,6 +42,11 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
   const handleSubmit = async () => {
     if (!data.name || data.name.length === 0) return setError("name");
     const res = await uploadImg(data);
+    if (res.error) return console.log(res.error);
+    if (res.success) {
+      setData(initData)
+      refresh();
+    }
   };
 
   return (
@@ -60,7 +64,7 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Crear ejercicio
+                Crear imagen
               </ModalHeader>
               <ModalBody>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-2">

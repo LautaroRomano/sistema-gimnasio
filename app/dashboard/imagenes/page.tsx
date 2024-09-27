@@ -1,6 +1,6 @@
 "use client";
 import { Drawer } from "@/components/dashboard/drawer";
-import { Card, CardFooter, Image, Button } from "@nextui-org/react";
+import { Card, CardFooter, Image, Button, Spinner } from "@nextui-org/react";
 import { CiEdit } from "react-icons/ci";
 import CreateModal from "@/components/dashboard/imagenes/CreateModal";
 import { useEffect, useState } from "react";
@@ -19,10 +19,12 @@ const initData: InitData[] = [];
 
 export default function ImagesPage() {
   const [data, setData] = useState(initData);
-  console.log("🚀 ~ ImagesPage ~ data:", data);
+  const [loading, setLoading] = useState(false);
 
   const getData = async () => {
+    setLoading(true)
     const res = await getImages(null);
+    setLoading(false)
     if (res.error) return console.log("Ocurrio un error!");
     if (!res.success) return 0;
     setData(res.success);
@@ -39,7 +41,10 @@ export default function ImagesPage() {
           <h1 className="text-lg py-4">Listado de Imagenes</h1>
           <CreateModal refresh={getData} />
         </div>
-
+        {loading ? <div className="flex justify-center items-center h-full">
+          <Spinner size="lg"/>
+          </div>
+          :
         <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap">
           {data.map((item, i) => {
             return (
@@ -67,6 +72,7 @@ export default function ImagesPage() {
             );
           })}
         </div>
+}
       </div>
     </div>
   );

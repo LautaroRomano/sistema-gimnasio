@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Drawer } from "@/components/dashboard/drawer";
-import { Card, CardFooter, Image, Button, CardBody } from "@nextui-org/react";
+import { Card, CardFooter, Image, Button, CardBody, Spinner } from "@nextui-org/react";
 import { CiEdit } from "react-icons/ci";
 import { IoMdTimer } from "react-icons/io";
 import CreateModal from "@/components/dashboard/usuarios/CreateModal";
@@ -16,9 +16,12 @@ const initData: UserType[] = [];
 
 export default function DashboardPage() {
   const [data, setData] = useState(initData);
+  const [loading, setLoading] = useState(false);
 
   const getData = async (search: string | null) => {
+    setLoading(true)
     const res = await getUsers(search);
+    setLoading(false)
     if (res.error) return console.log(res.error);
     if (res.success) setData(res.success);
   };
@@ -36,6 +39,10 @@ export default function DashboardPage() {
           <CreateModal refresh={getData} />
         </div>
 
+        {loading ? <div className="flex justify-center items-center h-full">
+          <Spinner size="lg"/>
+          </div>
+          :
         <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap">
           {data.map((item, i) => {
             return (
@@ -84,6 +91,7 @@ export default function DashboardPage() {
             );
           })}
         </div>
+        }
       </div>
     </div>
   );

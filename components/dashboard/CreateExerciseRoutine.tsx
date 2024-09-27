@@ -53,6 +53,7 @@ export default function CreateExerciseRoutine({
     const res = await create(data, routineId);
     if (res.error) return console.log(res.error);
     if (res.success) {
+      setData(initData)
       refresh();
     }
   };
