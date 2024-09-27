@@ -200,7 +200,7 @@ function SelectImgModal({ setImg }: { setImg: Function }) {
     <>
       <div className="flex gap-2 justify-between border border-[#35353B] py-2 px-4 items-center">
         <p className="text-sm">
-          {selected.name.length === 0 ? "Ninguna seleccionada" : selected.name}
+          {selected.name.length === 0 ? "Ninguna Imagen seleccionada" : selected.name}
         </p>
         <Button variant="bordered" onPress={onOpen} size="sm">
           Seleccionar
