@@ -73,13 +73,29 @@ export const getUsers = async (search: string | null) => {
         ? {
             AND: [
               {
-                name: {
-                  contains: search,
-                  mode: "insensitive",
-                },
+                deletedAt: null,
               },
               {
-                deletedAt: null,
+                OR: [
+                  {
+                    name: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    email: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    dni: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                ],
               },
             ],
           }
@@ -97,6 +113,7 @@ export const getUsers = async (search: string | null) => {
         updatedAt: true,
       },
     });
+    
 
     return { success: data };
   } catch (error) {

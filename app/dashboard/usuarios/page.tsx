@@ -81,7 +81,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
             }
-            placeholder="Nombre del usuario"
+            placeholder="Nombre, Email o dni"
             type="text"
             value={searchUser || ""}
             onChange={({ target }) => setSearchUser(target.value)}
@@ -94,7 +94,8 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap">
-            {data.map((item) => {
+            {data.length>0?
+            data.map((item) => {
               return (
                 <Card
                   key={item.id}
@@ -155,7 +156,9 @@ export default function DashboardPage() {
                   </CardFooter>
                 </Card>
               );
-            })}
+            })
+          :
+          <div className="flex items-center justify-center"><h4>No hay usuarios para mostrar</h4></div>}
           </div>
         )}
       </div>
