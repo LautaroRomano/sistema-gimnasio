@@ -111,6 +111,10 @@ export const getUsers = async (search: string | null) => {
         phone: true,
         updatedAt: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+        updatedAt: 'desc',
+      },
     });
     
 
@@ -175,6 +179,10 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
     const exercises = await prisma.routineExercises.findMany({
       where: {
         routineId: routine.id,
+      },
+      orderBy: {
+        createdAt: 'desc',
+        updatedAt: 'desc',
       },
     });
 
