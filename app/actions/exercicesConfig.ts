@@ -58,7 +58,6 @@ export const getExercises = async (search: string | null) => {
           }
         : {},
         orderBy: {
-          createdAt: 'desc',
           updatedAt: 'desc',
         },
     });
@@ -104,7 +103,6 @@ export const getImages = async (search: string | null) => {
           }
         : {},
         orderBy: {
-          createdAt: 'desc',
           updatedAt: 'desc',
         },
     });

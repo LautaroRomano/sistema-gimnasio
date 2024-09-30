@@ -112,7 +112,6 @@ export const getUsers = async (search: string | null) => {
         updatedAt: true,
       },
       orderBy: {
-        createdAt: 'desc',
         updatedAt: 'desc',
       },
     });
@@ -120,6 +119,7 @@ export const getUsers = async (search: string | null) => {
 
     return { success: data };
   } catch (error) {
+    console.log("🚀 ~ getUsers ~ error:", error)
     return { error: "Ocurrio un error" };
   }
 };
@@ -181,7 +181,6 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
         routineId: routine.id,
       },
       orderBy: {
-        createdAt: 'desc',
         updatedAt: 'desc',
       },
     });
