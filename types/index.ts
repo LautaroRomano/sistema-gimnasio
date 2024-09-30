@@ -20,10 +20,11 @@ export type ExerciseType = {
 // Users table type
 export type UserType = {
   id: number;
+  dni: string;
   email: string;
   name?: string | null;
   isAdmin: boolean;
-  password: string;
+  password?: string;
   phone?: string | null;
   createdAt: Date;
   updatedAt?: Date | null;

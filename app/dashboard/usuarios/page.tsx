@@ -22,10 +22,12 @@ import CreateModal from "@/components/dashboard/usuarios/CreateModal";
 import { Drawer } from "@/components/dashboard/drawer";
 
 const initData: UserType[] = [];
+const initEditUser: UserType | null = null;
 const searchUserInit: string | null = null;
 
 export default function DashboardPage() {
   const [data, setData] = useState(initData);
+  const [editUser, setEditUser] = useState(initEditUser);
   const [loading, setLoading] = useState(false);
   const [searchUser, setSearchUser] = useState(searchUserInit);
 
@@ -48,7 +50,11 @@ export default function DashboardPage() {
       <div className="flex flex-col gap-1 w-screen h-full">
         <div className="flex justify-center items-center gap-8 bg-backgroundComponents rounded-md relative">
           <h1 className="text-lg py-4">Listado de Usuarios</h1>
-          <CreateModal refresh={getData} />
+          <CreateModal
+            refresh={getData}
+            editUser={editUser}
+            setEditUser={setEditUser}
+          />
           <Input
             className="absolute right-0 max-w-sm"
             endContent={
@@ -134,11 +140,14 @@ export default function DashboardPage() {
                       >
                         Rutinas
                       </Button>
+
                       <Button
                         className="flex"
+                        color="primary"
                         radius="full"
                         size="sm"
                         startContent={<CiEdit />}
+                        onPress={() => setEditUser(item)}
                       >
                         Editar
                       </Button>

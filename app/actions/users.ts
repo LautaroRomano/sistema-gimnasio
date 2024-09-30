@@ -7,26 +7,61 @@ import { UserType } from "@/types";
 const prisma = new PrismaClient();
 
 export const createUser = async ({
+  id,
   name,
+  dni,
   email,
   password,
   phone,
 }: UserType) => {
   try {
-    if (!name) return { error: "Debe ingresar el nombre" };
-    const hashedPassword = await bcrypt.hash(password, 10);
+    let hashedPassword = null;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
 
-    await prisma.users.create({
-      data: {
-        name,
-        email,
-        phone,
-        password: hashedPassword,
-      },
+    if (!name || !dni || !email)
+      return { error: "Debe completar todos los campos!" };
+
+    const userDni = await prisma.users.findFirst({
+      where: { dni: dni },
     });
+    const userEmail = await prisma.users.findFirst({
+      where: { email: email },
+    });
+
+    if (id === 0 && userDni)
+      return { error: "Ya existe un usuario con este DNI!" };
+    if (id === 0 && userEmail)
+      return { error: "Ya existe un usuario con este EMAIL!" };
+
+    if (id === 0) {
+      if (!hashedPassword) return { error: "Debe ingresar una contraseña!" };
+      await prisma.users.create({
+        data: {
+          name,
+          dni,
+          email,
+          phone,
+          password: hashedPassword,
+        },
+      });
+    } else {
+      const updatePassword = hashedPassword ? { password: hashedPassword } : {};
+      await prisma.users.update({
+        data: {
+          name,
+          email,
+          phone,
+          ...updatePassword,
+        },
+        where: { id },
+      });
+    }
 
     return { success: true };
   } catch (error) {
+    console.log("🚀 ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
@@ -36,12 +71,31 @@ export const getUsers = async (search: string | null) => {
     const data = await prisma.users.findMany({
       where: search
         ? {
-            name: {
-              contains: search,
-              mode: "insensitive",
-            },
+            AND: [
+              {
+                name: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+              {
+                deletedAt: null,
+              },
+            ],
           }
-        : {},
+        : {
+            deletedAt: null,
+          },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        dni: true,
+        createdAt: true,
+        isAdmin: true,
+        phone: true,
+        updatedAt: true,
+      },
     });
 
     return { success: data };
@@ -60,8 +114,8 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
         date.getUTCDate(),
         0,
         0,
-        0,
-      ),
+        0
+      )
     );
 
     const endOfDay = new Date(
@@ -72,8 +126,8 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
         23,
         59,
         59,
-        999,
-      ),
+        999
+      )
     );
 
     // Buscar la rutina en el rango de la fecha (en UTC)

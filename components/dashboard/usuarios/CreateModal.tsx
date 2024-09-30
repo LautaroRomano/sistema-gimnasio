@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -13,9 +13,11 @@ import { IoMdAdd } from "react-icons/io";
 
 import { UserType } from "@/types";
 import { createUser } from "@/app/actions/users";
+import { toast } from "react-toastify";
 
 const initData: UserType = {
   id: 0,
+  dni: "",
   name: "",
   email: "",
   isAdmin: false,
@@ -27,7 +29,15 @@ const initData: UserType = {
 type ErrorData = string;
 const errorDataInit: ErrorData = "";
 
-export default function CreateModal({ refresh }: { refresh: Function }) {
+export default function CreateModal({
+  refresh,
+  editUser,
+  setEditUser,
+}: {
+  refresh: Function;
+  editUser: UserType | null;
+  setEditUser: Function;
+}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [data, setData] = useState(initData);
   const [error, setError] = useState(errorDataInit);
@@ -42,14 +52,44 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
 
   const handleSubmit = async () => {
     if (!data.name || data.name.length === 0) return setError("name");
+    if (!data.dni || data.dni.length === 0) return setError("dni");
+    if (!data.email || data.email.length === 0) return setError("email");
+
     const res = await createUser(data);
 
-    if (res.error) return 0;
+    if (res.error) {
+      toast.error(res.error, {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
+    }
     if (res.success) {
       setData(initData);
       refresh();
+      onOpenChange();
     }
   };
+
+  useEffect(() => {
+    if (editUser?.id) {
+      setData(editUser);
+      onOpen();
+    }
+  }, [editUser]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setEditUser(null);
+      setData(initData);
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -66,7 +106,7 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Crear usuario
+                {data?.id ? "Editar usuario" : "Crear usuario"}
               </ModalHeader>
               <ModalBody>
                 <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
@@ -77,6 +117,17 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
                     name="name"
                     type="text"
                     value={data.name || ""}
+                    variant="bordered"
+                    onChange={handleChange}
+                  />
+                  <Input
+                    errorMessage="Debe completar este campo"
+                    isDisabled={!!data?.id}
+                    isInvalid={error === "dni"}
+                    label="DNI"
+                    name="dni"
+                    type="text"
+                    value={data.dni || ""}
                     variant="bordered"
                     onChange={handleChange}
                   />
@@ -133,7 +184,6 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
                   size="sm"
                   onPress={() => {
                     handleSubmit();
-                    onClose();
                   }}
                 >
                   Guardar
