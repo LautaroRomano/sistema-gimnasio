@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -13,17 +13,16 @@ import { IoMdAdd } from "react-icons/io";
 
 import { uploadImg } from "@/app/actions/exercicesConfig";
 import { uploadFile } from "@/lib/firebase";
+import { ImageType } from "@/types";
+import { toast } from "react-toastify";
 
-type ImageType = {
-  name: string;
-  img: string;
-};
-const initData: ImageType = { name: "", img: "" };
+const initData: ImageType = { id:0,name: "", imageUrl: "" };
 
 type ErrorData = string;
 const errorDataInit: ErrorData = "";
 
-export default function CreateModal({ refresh }: { refresh: Function }) {
+export default function CreateModal({ refresh,edit,setEdit }: { refresh: Function,edit:ImageType  | null;
+  setEdit: Function; }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [data, setData] = useState(initData);
   const [error, setError] = useState(errorDataInit);
@@ -37,7 +36,7 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
   const handleChangeImg = async ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { name, files } = target;
 
-    if (!files || !files[0]) return setError("img");
+    if (!files || !files[0]) return setError("imageUrl");
     const url = await uploadFile(files[0]);
 
     setData((p) => ({ ...p, [name]: url }));
@@ -47,12 +46,37 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
     if (!data.name || data.name.length === 0) return setError("name");
     const res = await uploadImg(data);
 
-    if (res.error) return 0;
+    if (res.error) {
+      toast.error(res.error, {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
+    }
     if (res.success) {
       setData(initData);
       refresh();
     }
   };
+
+  useEffect(() => {
+    if (edit?.id) {
+      setData(edit);
+      onOpen();
+    }
+  }, [edit]);
+  useEffect(() => {
+    if (!isOpen) {
+      setEdit(null);
+      setData(initData);
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -69,7 +93,7 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Crear imagen
+              {data?.id ? "Editar imagen" : "Crear imagen"}
               </ModalHeader>
               <ModalBody>
                 <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
@@ -86,9 +110,10 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
                   <Input
                     accept="image/*"
                     errorMessage="Debe ingresar una imagen"
-                    isInvalid={error === "img"}
+                    // isDisabled={!!data?.id}
+                    isInvalid={error === "imageUrl"}
                     label="Imagen"
-                    name="img"
+                    name="imageUrl"
                     type="file"
                     variant="bordered"
                     onChange={handleChangeImg}

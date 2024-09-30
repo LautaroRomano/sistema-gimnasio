@@ -61,7 +61,6 @@ export const createUser = async ({
 
     return { success: true };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };

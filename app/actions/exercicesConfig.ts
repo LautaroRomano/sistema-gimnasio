@@ -1,7 +1,7 @@
 "use server";
 import { PrismaClient } from "@prisma/client";
 
-import { ExerciseType } from "@/types";
+import { ExerciseType, ImageType } from "@/types";
 
 const prisma = new PrismaClient();
 
@@ -50,18 +50,22 @@ export const getExercises = async (search: string | null) => {
   }
 };
 
-export const uploadImg = async ({
-  img,
-  name,
-}: {
-  img: string;
-  name: string;
-}) => {
+export const uploadImg = async ({ id, imageUrl, name }: ImageType) => {
   try {
-    if (!img || img.length === 0)
+    if (!imageUrl || imageUrl.length === 0)
       return { error: "Ocurrio un error al cargar la imagen" };
 
-    await prisma.images.create({ data: { imageUrl: img, name } });
+    if (id === 0) {
+      await prisma.images.create({ data: { imageUrl: imageUrl, name } });
+    } else {
+      await prisma.images.update({
+        data: {
+          name,
+          imageUrl,
+        },
+        where: { id },
+      });
+    }
 
     return { success: true };
   } catch (error) {

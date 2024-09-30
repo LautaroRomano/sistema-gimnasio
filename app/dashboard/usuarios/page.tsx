@@ -20,6 +20,7 @@ import { getUsers } from "@/app/actions/users";
 import { UserType } from "@/types";
 import CreateModal from "@/components/dashboard/usuarios/CreateModal";
 import { Drawer } from "@/components/dashboard/drawer";
+import { toast } from "react-toastify";
 
 const initData: UserType[] = [];
 const initEditUser: UserType | null = null;
@@ -36,7 +37,19 @@ export default function DashboardPage() {
     const res = await getUsers(search);
 
     setLoading(false);
-    if (res.error) return 0;
+    if (res.error) {
+      toast.error(res.error, {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
+    }
     if (res.success) setData(res.success);
   };
 

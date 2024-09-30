@@ -65,7 +65,7 @@ export type ImageType = {
   name: string;
   imageUrl?: string | null;
   lastUse?: Date | null;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date | null;
   deletedAt?: Date | null;
 };
