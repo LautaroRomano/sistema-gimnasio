@@ -1,27 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardFooter,
-  Button,
-  CardBody,
-  DatePicker,
-  Divider,
-  Spinner,
-  Input,
-} from "@nextui-org/react";
-import { IoMdClose, IoMdTimer } from "react-icons/io";
+import { Button, DatePicker, Divider, Spinner, Input } from "@nextui-org/react";
+import { IoMdClose } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-import { RoutineType, UserType } from "@/types";
+import { ExerciseType, RoutineType, UserType } from "@/types";
 import { getAUserRoutine, getUsers } from "@/app/actions/users";
 import { Drawer } from "@/components/dashboard/drawer";
 import TableRoutines from "@/components/dashboard/tableRoutines";
 import CreateExerciseRoutine from "@/components/dashboard/CreateExerciseRoutine";
+import { toast } from "react-toastify";
 
 const initData: UserType[] = [];
 const initRoutineData: RoutineType | null = null;
+const initEdit: ExerciseType | null = null;
 const initUserId: number | null = null;
 const searchUserInit: string | null = null;
 
@@ -29,6 +22,7 @@ export default function DashboardPage() {
   const [users, setUsers] = useState(initData);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [routine, setRoutine] = useState(initRoutineData);
+  const [edit, setEdit] = useState(initEdit);
   const [userId, setUserId] = useState(initUserId);
   const [loading, setLoading] = useState(false);
   const [searchUser, setSearchUser] = useState(searchUserInit);
@@ -36,21 +30,55 @@ export default function DashboardPage() {
   const getUserRoutine = async (date?: Date) => {
     setLoading(true);
     try {
-      if (!userId) throw "Se nesecita un usuario";
+      if (!userId) return;
       const res = await getAUserRoutine(userId, date || selectedDate);
 
-      if (res.error) throw res.error;
+      if (res.error) {
+        toast.error(res.error, {
+          position: "top-right",
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        return;
+      }
       if (res.success) setRoutine(res.success);
       setLoading(false);
     } catch (error) {
-      setLoading(false);
+      toast.error("Ocurrio un error", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
     }
   };
 
   const getUsersList = async (search: string | null) => {
     const res = await getUsers(search);
 
-    if (res.error) return 0;
+    if (res.error) {
+      toast.error(res.error, {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
+    }
     if (res.success) setUsers(res.success);
   };
 
@@ -116,13 +144,25 @@ export default function DashboardPage() {
                 <CreateExerciseRoutine
                   refresh={() => getUserRoutine()}
                   routineId={routine?.id}
+                  edit={edit}
+                  setEdit={setEdit}
                 />
               )}
               {routine?.exercises[0] && (
                 <TableRoutines
+                  setEdit={setEdit}
                   data={routine.exercises.map(
                     (
-                      { img, name, type, value, series, description, success },
+                      {
+                        img,
+                        name,
+                        type,
+                        value,
+                        series,
+                        description,
+                        success,
+                        ...data
+                      },
                       i
                     ) => ({
                       id: i + 1,
@@ -133,6 +173,19 @@ export default function DashboardPage() {
                       Series: series,
                       descripcion: description,
                       terminado: success,
+                      actions: {
+                        edit: () =>
+                          setEdit({
+                            img,
+                            name,
+                            type,
+                            value,
+                            series,
+                            description,
+                            success,
+                            ...data,
+                          }),
+                      },
                     })
                   )}
                 />
@@ -192,15 +245,15 @@ export default function DashboardPage() {
                 href={`/dashboard?user=${item.id}`}
               >
                 <div className="flex w-full">
-                    <div className="flex flex-col gap-2 p-2">
-                      <p className="text-lg text-start">{item.name}</p>
-                      <div className="flex flex-col w-full gap-2">
-                        <div className=" flex gap-2 items-center">
-                          <MdEmail />
-                          {item.email}
-                        </div>
+                  <div className="flex flex-col gap-2 p-2">
+                    <p className="text-lg text-start">{item.name}</p>
+                    <div className="flex flex-col w-full gap-2">
+                      <div className=" flex gap-2 items-center">
+                        <MdEmail />
+                        {item.email}
                       </div>
                     </div>
+                  </div>
                 </div>
               </Button>
             );

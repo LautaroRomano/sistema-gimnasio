@@ -12,10 +12,10 @@ import {
   Divider,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
-
 import { ExerciseType } from "@/types";
 import { getExercises, getImages } from "@/app/actions/exercicesConfig";
 import { create } from "@/app/actions/routines";
+import { toast } from "react-toastify";
 
 const initData: ExerciseType = {
   id: 0,
@@ -34,9 +34,13 @@ const errorDataInit: ErrorData = "";
 export default function CreateExerciseRoutine({
   refresh,
   routineId,
+  edit,
+  setEdit,
 }: {
   refresh: Function;
   routineId: number;
+  edit: ExerciseType | null;
+  setEdit: Function;
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [data, setData] = useState(initData);
@@ -55,12 +59,38 @@ export default function CreateExerciseRoutine({
     if (!data.img || data.img.length === 0) return setError("img");
     const res = await create(data, routineId);
 
-    if (res.error) return 0;
+    if (res.error) {
+      toast.error(res.error, {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
+    }
     if (res.success) {
       setData(initData);
       refresh();
+      onOpenChange();
     }
   };
+
+  useEffect(() => {
+    if (edit?.id) {
+      setData(edit);
+      onOpen();
+    }
+  }, [edit]);
+  useEffect(() => {
+    if (!isOpen) {
+      setEdit(null);
+      setData(initData);
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -77,7 +107,7 @@ export default function CreateExerciseRoutine({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Crear ejercicio
+              {data?.id ? "Editar ejercicio" : "Crear ejercicio"}
               </ModalHeader>
               <ModalBody>
                 <form className="flex flex-col gap-2" onSubmit={handleSubmit}>

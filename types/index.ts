@@ -12,6 +12,7 @@ export type ExerciseType = {
   type: string;
   value: string;
   series: number;
+  success?: boolean|null;
   createdAt: Date;
   updatedAt?: Date | null;
   deletedAt?: Date | null;
