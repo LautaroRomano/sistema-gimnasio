@@ -16,13 +16,20 @@ import { uploadFile } from "@/lib/firebase";
 import { ImageType } from "@/types";
 import { toast } from "react-toastify";
 
-const initData: ImageType = { id:0,name: "", imageUrl: "" };
+const initData: ImageType = { id: 0, name: "", imageUrl: "" };
 
 type ErrorData = string;
 const errorDataInit: ErrorData = "";
 
-export default function CreateModal({ refresh,edit,setEdit }: { refresh: Function,edit:ImageType  | null;
-  setEdit: Function; }) {
+export default function CreateModal({
+  refresh,
+  edit,
+  setEdit,
+}: {
+  refresh: Function;
+  edit: ImageType | null;
+  setEdit: Function;
+}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [data, setData] = useState(initData);
   const [error, setError] = useState(errorDataInit);
@@ -62,6 +69,7 @@ export default function CreateModal({ refresh,edit,setEdit }: { refresh: Functio
     if (res.success) {
       setData(initData);
       refresh();
+      onOpenChange();
     }
   };
 
@@ -93,7 +101,7 @@ export default function CreateModal({ refresh,edit,setEdit }: { refresh: Functio
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-              {data?.id ? "Editar imagen" : "Crear imagen"}
+                {data?.id ? "Editar imagen" : "Crear imagen"}
               </ModalHeader>
               <ModalBody>
                 <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
@@ -134,7 +142,6 @@ export default function CreateModal({ refresh,edit,setEdit }: { refresh: Functio
                   size="sm"
                   onPress={() => {
                     handleSubmit();
-                    onClose();
                   }}
                 >
                   Guardar

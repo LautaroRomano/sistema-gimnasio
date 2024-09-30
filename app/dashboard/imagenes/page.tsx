@@ -18,12 +18,12 @@ import { IoMdClose } from "react-icons/io";
 import { ImageType } from "@/types";
 
 const initData: ImageType[] = [];
-const initEditImg: ImageType | null = null;
+const initEdit: ImageType | null = null;
 const searchInit: string | null = null;
 
 export default function ImagesPage() {
   const [data, setData] = useState(initData);
-  const [editImg, setEditImg] = useState(initEditImg);
+  const [edit, setEdit] = useState(initEdit);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState(searchInit);
 
@@ -45,7 +45,19 @@ export default function ImagesPage() {
       });
       return;
     }
-    if (!res.success) return 0;
+    if (!res.success) {
+      toast.error('Ocurrió un error inesperado', {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
+    }
     setData(res.success);
   };
 
@@ -61,8 +73,8 @@ export default function ImagesPage() {
           <h1 className="text-lg py-4">Listado de Imagenes</h1>
           <CreateModal
             refresh={getData}
-            edit={editImg}
-            setEdit={setEditImg}
+            edit={edit}
+            setEdit={setEdit}
           />
           <Input
             className="absolute right-0 max-w-sm"
@@ -123,7 +135,7 @@ export default function ImagesPage() {
                         </div>
                       </div>
                       <Button radius="full" size="sm" startContent={<CiEdit />}
-                      onPress={()=>setEditImg(item)}>
+                      onPress={()=>setEdit(item)}>
                         Editar
                       </Button>
                     </CardFooter>

@@ -354,17 +354,17 @@ function SelectImgModal({
                       return (
                         <button
                           key={image.id}
-                          className="flex p-2 justify-between max-h-24 hover:bg-gray-800 cursor-pointer gap-4"
+                          className="flex p-2 justify-evenly items-center max-h-24 hover:bg-gray-800 cursor-pointer gap-4"
                           onClick={() => {
                             setImg(image.imageUrl);
                             setSelected(image);
                             onClose();
                           }}
                         >
-                          <div className="flex">
+                          <div className="flex h-full">
                             <img
                               alt={image.name}
-                              className="object-contain"
+                              className="object-contain   h-full"
                               src={image.imageUrl || ""}
                             />
                           </div>

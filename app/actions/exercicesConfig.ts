@@ -6,6 +6,7 @@ import { ExerciseType, ImageType } from "@/types";
 const prisma = new PrismaClient();
 
 export const create = async ({
+  id,
   name,
   img,
   description,
@@ -14,16 +15,30 @@ export const create = async ({
   series,
 }: ExerciseType) => {
   try {
-    await prisma.exercisesConfig.create({
-      data: {
-        name,
-        img,
-        description,
-        type,
-        value,
-        series: series * 1,
-      },
-    });
+    if (id === 0) {
+      await prisma.exercisesConfig.create({
+        data: {
+          name,
+          img,
+          description,
+          type,
+          value,
+          series: series * 1,
+        },
+      });
+    } else {
+      await prisma.exercisesConfig.update({
+        data: {
+          name,
+          img,
+          description,
+          type,
+          value,
+          series: series * 1,
+        },
+        where: { id },
+      });
+    }
 
     return { success: true };
   } catch (error) {

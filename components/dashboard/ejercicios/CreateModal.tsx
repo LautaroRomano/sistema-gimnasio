@@ -14,6 +14,7 @@ import { IoMdAdd } from "react-icons/io";
 
 import { ExerciseType } from "@/types";
 import { create, getImages } from "@/app/actions/exercicesConfig";
+import { toast } from "react-toastify";
 
 const initData: ExerciseType = {
   id: 0,
@@ -29,7 +30,15 @@ const initData: ExerciseType = {
 type ErrorData = string;
 const errorDataInit: ErrorData = "";
 
-export default function CreateModal({ refresh }: { refresh: Function }) {
+export default function CreateModal({
+  refresh,
+  edit,
+  setEdit,
+}: {
+  refresh: Function;
+  edit: ExerciseType | null;
+  setEdit: Function;
+}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [data, setData] = useState(initData);
   const [error, setError] = useState(errorDataInit);
@@ -47,12 +56,38 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
     if (!data.img || data.img.length === 0) return setError("img");
     const res = await create(data);
 
-    if (res.error) return 0;
+    if (res.error) {
+      toast.error(res.error, {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
+    }
     if (res.success) {
       setData(initData);
       refresh();
+      onOpenChange();
     }
   };
+
+  useEffect(() => {
+    if (edit?.id) {
+      setData(edit);
+      onOpen();
+    }
+  }, [edit]);
+  useEffect(() => {
+    if (!isOpen) {
+      setEdit(null);
+      setData(initData);
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -69,7 +104,7 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Crear ejercicio
+              {data?.id ? "Editar ejercicio" : "Crear ejercicio"}
               </ModalHeader>
               <ModalBody>
                 <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
@@ -144,7 +179,6 @@ export default function CreateModal({ refresh }: { refresh: Function }) {
                   size="sm"
                   onPress={() => {
                     handleSubmit();
-                    onClose();
                   }}
                 >
                   Guardar
@@ -219,7 +253,7 @@ function SelectImgModal({ setImg }: { setImg: Function }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Selecciona una imagen
+                Selecciona una imagen 2
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-2">
@@ -236,17 +270,17 @@ function SelectImgModal({ setImg }: { setImg: Function }) {
                       return (
                         <button
                           key={image.id}
-                          className="flex p-2 justify-between max-h-24 hover:bg-gray-800 cursor-pointer gap-4"
+                          className="flex p-2 justify-evenly items-center max-h-24 hover:bg-gray-800 cursor-pointer gap-4"
                           onClick={() => {
                             setImg(image.imageUrl);
                             setSelected(image);
                             onClose();
                           }}
                         >
-                          <div className="flex">
+                          <div className="flex h-full">
                             <img
                               alt={image.name}
-                              className="object-contain"
+                              className="object-contain   h-full"
                               src={image.imageUrl || ""}
                             />
                           </div>
