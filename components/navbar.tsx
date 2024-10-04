@@ -42,7 +42,7 @@ export const Navbar = () => {
       labelPlacement="outside"
       placeholder="Search..."
       startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+        <SearchIcon size={24} className="text-base text-default-400 pointer-events-none flex-shrink-0" />
       }
       type="search"
     />
@@ -53,7 +53,7 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
-            <Logo />
+            <Logo size={24} />
             <p className="font-bold text-inherit">ACME</p>
           </NextLink>
         </NavbarBrand>
@@ -81,13 +81,13 @@ export const Navbar = () => {
       >
         <NavbarItem className="hidden sm:flex gap-2">
           <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter}>
-            <TwitterIcon className="text-default-500" />
+            <TwitterIcon size={24} className="text-default-500" />
           </Link>
           <Link isExternal aria-label="Discord" href={siteConfig.links.discord}>
-            <DiscordIcon className="text-default-500" />
+            <DiscordIcon size={24} className="text-default-500" />
           </Link>
           <Link isExternal aria-label="Github" href={siteConfig.links.github}>
-            <GithubIcon className="text-default-500" />
+            <GithubIcon size={24} className="text-default-500" />
           </Link>
           <ThemeSwitch />
         </NavbarItem>
@@ -98,7 +98,7 @@ export const Navbar = () => {
             as={Link}
             className="text-sm font-normal text-default-600 bg-default-100"
             href={siteConfig.links.sponsor}
-            startContent={<HeartFilledIcon className="text-danger" />}
+            startContent={<HeartFilledIcon size={24} className="text-danger" />}
             variant="flat"
           >
             Sponsor
@@ -108,7 +108,7 @@ export const Navbar = () => {
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
         <Link isExternal aria-label="Github" href={siteConfig.links.github}>
-          <GithubIcon className="text-default-500" />
+          <GithubIcon size={24} className="text-default-500" />
         </Link>
         <ThemeSwitch />
         <NavbarMenuToggle />

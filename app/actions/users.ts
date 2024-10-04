@@ -1,10 +1,51 @@
 "use server";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 import { UserType } from "@/types";
 
 const prisma = new PrismaClient();
+
+export const verifyToken = async (token: string) => {
+  try {
+    const verify = jwt.verify(token, (process.env.JWT_SECRET||''));
+    if (typeof verify !== "string" && (verify as JwtPayload).user) {
+      return { success: (verify as JwtPayload).user };
+    }
+    return { error: "Ocurrió un error" };
+  } catch (error) {
+    return { error: "Ocurrió un error" };
+  }
+};
+
+export const loginUser = async ({
+  dni,
+  password,
+}: {
+  dni: string;
+  password: string;
+}) => {
+  try {
+    if (!dni || !password) return { error: "Debe completar todos los campos!" };
+
+    const userDni = await prisma.users.findFirst({
+      where: { dni: dni },
+    });
+
+    if (!userDni) return { error: "Usuario no encontrado!" };
+
+    const isAuth = await bcrypt.compare(password, userDni.password);
+    if (isAuth) {
+      var token = jwt.sign({ user: userDni }, (process.env.JWT_SECRET||''));
+      return { success: userDni, token };
+    }
+
+    return { error: "Contraseña incorrecta" };
+  } catch (error) {
+    return { error: "Ocurrio un error" };
+  }
+};
 
 export const createUser = async ({
   id,
@@ -112,14 +153,13 @@ export const getUsers = async (search: string | null) => {
         updatedAt: true,
       },
       orderBy: {
-        updatedAt: 'desc',
+        updatedAt: "desc",
       },
     });
-    
 
     return { success: data };
   } catch (error) {
-    console.log("🚀 ~ getUsers ~ error:", error)
+    console.log("🚀 ~ getUsers ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
@@ -181,7 +221,7 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
         routineId: routine.id,
       },
       orderBy: {
-        updatedAt: 'desc',
+        updatedAt: "desc",
       },
     });
 

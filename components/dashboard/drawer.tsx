@@ -12,7 +12,7 @@ export const Drawer = () => {
     >
       <div className="flex gap-3 w-full items-center justify-center py-4">
         <NextLink className="flex justify-start items-center gap-1" href="/">
-          <Logo />
+          <Logo size={24} />
           <p className="font-bold text-inherit">ACME</p>
         </NextLink>
       </div>

@@ -1,14 +1,36 @@
+"use client";
 import { Link } from "@nextui-org/link";
 import { Snippet } from "@nextui-org/snippet";
 import { Code } from "@nextui-org/code";
 import { button as buttonStyles } from "@nextui-org/theme";
-
+import { useRouter } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
 import { Navbar } from "@/components/navbar";
+import { useEffect } from "react";
+import { verifyToken } from "./actions/users";
 
 export default function Home() {
+  const router = useRouter();
+
+  const verToken = async (token: string) => {
+    const res = await verifyToken(token);
+    console.log("🚀 ~ verToken ~ res:", res)
+    if(!res.success){
+      router.push("/login");
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("sessionToken");
+    if (!token || token.length === 0) {
+      router.push("/login");
+    } else {
+      verToken(token);
+    }
+  }, []);
+
   return (
     <section className="flex flex-col items-center justify-center gap-4">
       <Navbar />
