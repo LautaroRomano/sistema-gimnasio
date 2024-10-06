@@ -20,7 +20,7 @@ export default function TableRoutines({ data, setEdit }) {
 
     switch (columnKey) {
       case "gif":
-        return <Image src={cellValue} isZoomed />;
+        return <Image src={cellValue} isZoomed className={"max-h-32"}/>;
       case "name":
         return (
           <div className="flex flex-col">
@@ -81,7 +81,7 @@ export default function TableRoutines({ data, setEdit }) {
       <TableBody items={data}>
         {(item, i) => {
           return (
-            <TableRow key={item.id}>
+            <TableRow key={item.id} className="max-h-32">
               {(columnKey) => (
                 <TableCell align="center" className={"max-h-32"}>
                   {renderCell(item, columnKey)}

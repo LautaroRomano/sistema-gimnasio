@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 
 export const verifyToken = async (token: string) => {
   try {
-    const verify = jwt.verify(token, (process.env.JWT_SECRET||''));
+    const verify = jwt.verify(token, process.env.JWT_SECRET || "");
     if (typeof verify !== "string" && (verify as JwtPayload).user) {
       return { success: (verify as JwtPayload).user };
     }
@@ -35,9 +35,19 @@ export const loginUser = async ({
 
     if (!userDni) return { error: "Usuario no encontrado!" };
 
+    if (userDni.password === "UPDATE") {
+      const newPassword = await bcrypt.hash(password, 10);
+      prisma.users.update({
+        data: { password: newPassword },
+        where: { id: userDni.id },
+      });
+      var token = jwt.sign({ user: userDni }, process.env.JWT_SECRET || "");
+      return { success: userDni, token };
+    }
+
     const isAuth = await bcrypt.compare(password, userDni.password);
     if (isAuth) {
-      var token = jwt.sign({ user: userDni }, (process.env.JWT_SECRET||''));
+      var token = jwt.sign({ user: userDni }, process.env.JWT_SECRET || "");
       return { success: userDni, token };
     }
 
@@ -116,6 +126,9 @@ export const getUsers = async (search: string | null) => {
                 deletedAt: null,
               },
               {
+                isAdmin: false,
+              },
+              {
                 OR: [
                   {
                     name: {
@@ -140,7 +153,14 @@ export const getUsers = async (search: string | null) => {
             ],
           }
         : {
-            deletedAt: null,
+            AND: [
+              {
+                deletedAt: null,
+              },
+              {
+                isAdmin: false,
+              },
+            ],
           },
       select: {
         id: true,

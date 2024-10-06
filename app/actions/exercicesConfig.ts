@@ -87,6 +87,7 @@ export const uploadImg = async ({ id, imageUrl, name }: ImageType) => {
 
     return { success: true };
   } catch (error) {
+    console.log("🚀 ~ uploadImg ~ error:", error)
     return { error: "Ocurrio un error" };
   }
 };

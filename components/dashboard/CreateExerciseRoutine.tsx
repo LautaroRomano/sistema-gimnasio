@@ -260,7 +260,7 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
                           key={exerc.id}
                           className="flex p-2 justify-between max-h-24 hover:bg-gray-800 cursor-pointer gap-4"
                           onClick={() => {
-                            updateData(exerc);
+                            updateData({...exerc,id:0});
                             onClose();
                           }}
                         >

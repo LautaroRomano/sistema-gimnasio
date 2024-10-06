@@ -9,6 +9,7 @@ export const create = async (
   { id, name, img, description, type, value, series }: ExerciseType,
   routineId: number
 ) => {
+  console.log( { id, name, img, description, type, value, series })
   try {
     if (id === 0) {
       await prisma.routineExercises.create({
@@ -39,6 +40,7 @@ export const create = async (
 
     return { success: true };
   } catch (error) {
+    console.log("🚀 ~ error:", error)
     return { error: "Ocurrio un error" };
   }
 };
