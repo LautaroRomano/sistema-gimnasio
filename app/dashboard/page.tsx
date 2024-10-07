@@ -200,9 +200,10 @@ export default function DashboardPage() {
     <div className="flex gap-1 bg-backgroundBack w-screen h-screen">
       <Drawer />
       <div className="flex flex-col gap-1 w-screen h-full">
-        <div className="flex relative justify-center items-center gap-8 bg-backgroundComponents rounded-md">
+        <div className="flex relative justify-between px-5 items-center gap-8 bg-backgroundComponents rounded-md">
+          <h1 className="text-lg py-4">Selecciona un usuario</h1>
           <Input
-            className="absolute right-0 max-w-sm"
+            className="flex max-w-sm"
             endContent={
               <div className="flex gap-2">
                 {searchUser && searchUser.length > 0 && (
@@ -232,7 +233,6 @@ export default function DashboardPage() {
             value={searchUser || ""}
             onChange={({ target }) => setSearchUser(target.value)}
           />
-          <h1 className="text-lg py-4">Selecciona un usuario</h1>
         </div>
 
         <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap">

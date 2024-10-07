@@ -67,14 +67,14 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="flex gap-1 bg-backgroundBack w-screen h-screen">
+    <div className="flex gap-1 bg-backgroundBack w-screen h-screen relative">
       <Drawer />
+      <CreateModal refresh={getData} edit={edit} setEdit={setEdit} />
       <div className="flex flex-col gap-1 w-screen h-full">
-        <div className="flex justify-center items-center gap-8 bg-backgroundComponents rounded-md relative">
-          <h1 className="text-lg py-4">Plantillas de Ejercicios</h1>
-          <CreateModal refresh={getData} edit={edit} setEdit={setEdit} />
+        <div className="flex justify-between px-5 items-center gap-8 bg-backgroundComponents rounded-md relative">
+          <h1 className="flex text-lg py-4">Plantillas de Ejercicios</h1>
           <Input
-            className="absolute right-0 max-w-sm"
+            className="flex max-w-sm"
             endContent={
               <div className="flex gap-2">
                 {search && search.length > 0 && (
@@ -128,9 +128,7 @@ export default function DashboardPage() {
                     <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
                       <div className="flex flex-grow gap-2 items-center">
                         <div className="flex flex-col justify-start items-start">
-                          <p className="text-sm text-white">
-                            {item.name}
-                          </p>
+                          <p className="text-sm text-white">{item.name}</p>
                           <p className="text-tiny text-white/60">
                             {item.description}
                           </p>
@@ -146,7 +144,12 @@ export default function DashboardPage() {
                           </div>
                         </div>
                       </div>
-                      <Button radius="full" size="sm" startContent={<CiEdit />} onPress={()=>setEdit(item)}>
+                      <Button
+                        radius="full"
+                        size="sm"
+                        startContent={<CiEdit />}
+                        onPress={() => setEdit(item)}
+                      >
                         Editar
                       </Button>
                     </CardFooter>

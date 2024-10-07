@@ -11,7 +11,11 @@ export const verifyToken = async (token: string) => {
   try {
     const verify = jwt.verify(token, process.env.JWT_SECRET || "");
     if (typeof verify !== "string" && (verify as JwtPayload).user) {
-      return { success: (verify as JwtPayload).user };
+      const myUser = await prisma.users.findFirst({
+        where: { id: (verify as JwtPayload).user.id },
+      });
+      if (myUser) return { success: myUser };
+      else return { error: "Usuario no encontrado" };
     }
     return { error: "Ocurrió un error" };
   } catch (error) {
@@ -53,6 +57,7 @@ export const loginUser = async ({
 
     return { error: "Contraseña incorrecta" };
   } catch (error) {
+    console.log("🚀 ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };

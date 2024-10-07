@@ -8,6 +8,7 @@ import {
   Button,
   useDisclosure,
   Input,
+  Spinner,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
 
@@ -32,6 +33,7 @@ export default function CreateModal({
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [data, setData] = useState(initData);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(errorDataInit);
 
   const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -41,19 +43,31 @@ export default function CreateModal({
   };
 
   const handleChangeImg = async ({ target }: ChangeEvent<HTMLInputElement>) => {
+    if (loading) return;
     const { name, files } = target;
 
-    if (!files || !files[0]) return setError("imageUrl");
-    const url = await uploadFile(files[0]);
+    try {
+      if (!files || !files[0]) return setError("imageUrl");
+      setLoading(true);
+      const url = await uploadFile(files[0]);
+      if (typeof url !== "string" && url.error) return toast.error(url.error);
 
-    setData((p) => ({ ...p, [name]: url }));
+      setData((p) => ({ ...p, [name]: url }));
+    } catch (error) {
+      console.log("🚀 ~ handleChangeImg ~ error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async () => {
+    if (loading) return;
     if (!data.name || data.name.length === 0) return setError("name");
+    setLoading(true);
     const res = await uploadImg(data);
 
     if (res.error) {
+      setLoading(false);
       toast.error(res.error, {
         position: "top-right",
         autoClose: 2500,
@@ -66,6 +80,7 @@ export default function CreateModal({
       });
       return;
     }
+    setLoading(false);
     if (res.success) {
       setData(initData);
       refresh();
@@ -88,14 +103,16 @@ export default function CreateModal({
 
   return (
     <>
-      <Button
-        color="primary"
-        size="sm"
-        startContent={<IoMdAdd />}
-        onPress={onOpen}
-      >
-        Agregar nuevo
-      </Button>
+      <div className="absolute bottom-5 right-5">
+        <Button
+          color="primary"
+          size="lg"
+          startContent={<IoMdAdd />}
+          onPress={onOpen}
+        >
+          Agregar nuevo
+        </Button>
+      </div>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -104,7 +121,7 @@ export default function CreateModal({
                 {data?.id ? "Editar imagen" : "Crear imagen"}
               </ModalHeader>
               <ModalBody>
-                <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+                <form className="flex flex-col gap-2">
                   <Input
                     errorMessage="Debe completar este campo"
                     isInvalid={error === "name"}
@@ -118,7 +135,6 @@ export default function CreateModal({
                   <Input
                     accept="image/*"
                     errorMessage="Debe ingresar una imagen"
-                    // isDisabled={!!data?.id}
                     isInvalid={error === "imageUrl"}
                     label="Imagen"
                     name="imageUrl"
@@ -140,9 +156,12 @@ export default function CreateModal({
                 <Button
                   color="primary"
                   size="sm"
+                  disabled={loading}
                   onPress={() => {
+                    if (loading) return;
                     handleSubmit();
                   }}
+                  isLoading={loading}
                 >
                   Guardar
                 </Button>

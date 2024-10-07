@@ -19,6 +19,8 @@ export default function Home() {
     console.log("🚀 ~ verToken ~ res:", res)
     if(!res.success){
       router.push("/login");
+    }else if(res.success.isAdmin){
+      router.push("/dashboard");
     }
   };
 

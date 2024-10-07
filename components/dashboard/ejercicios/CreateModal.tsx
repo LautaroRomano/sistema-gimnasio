@@ -91,20 +91,22 @@ export default function CreateModal({
 
   return (
     <>
-      <Button
-        color="primary"
-        size="sm"
-        startContent={<IoMdAdd />}
-        onPress={onOpen}
-      >
-        Agregar nuevo
-      </Button>
+      <div className="absolute bottom-5 right-5">
+        <Button
+          color="primary"
+          size="lg"
+          startContent={<IoMdAdd />}
+          onPress={onOpen}
+        >
+          Agregar nuevo
+        </Button>
+      </div>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-              {data?.id ? "Editar ejercicio" : "Crear ejercicio"}
+                {data?.id ? "Editar ejercicio" : "Crear ejercicio"}
               </ModalHeader>
               <ModalBody>
                 <form className="flex flex-col gap-2" onSubmit={handleSubmit}>

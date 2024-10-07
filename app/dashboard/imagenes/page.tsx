@@ -66,18 +66,18 @@ export default function ImagesPage() {
   }, []);
 
   return (
-    <div className="flex gap-1 bg-backgroundBack w-screen h-screen">
+    <div className="flex gap-1 bg-backgroundBack w-screen h-screen relative">
       <Drawer />
-      <div className="flex flex-col gap-1 w-screen h-full">
-        <div className="flex justify-center items-center gap-8 bg-backgroundComponents rounded-md relative">
-          <h1 className="text-lg py-4">Listado de Imagenes</h1>
-          <CreateModal
+      <CreateModal
             refresh={getData}
             edit={edit}
             setEdit={setEdit}
           />
+      <div className="flex flex-col gap-1 w-screen h-full">
+        <div className="flex justify-between px-5 items-center gap-8 bg-backgroundComponents rounded-md relative">
+          <h1 className="text-lg py-4">Listado de Imagenes</h1>
           <Input
-            className="absolute right-0 max-w-sm"
+            className="flex max-w-sm"
             endContent={
               <div className="flex gap-2">
                 {search && search.length > 0 && (

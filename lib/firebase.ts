@@ -16,6 +16,8 @@ const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 
 export async function uploadFile(file: File) {
+  if (!file.type.startsWith("image/"))
+    return { error: "Solo esta permitido subir una imagen o gif!" };
   const storageRef = ref(storage, v4());
 
   await uploadBytes(storageRef, file);

@@ -52,6 +52,7 @@ function LoginPage() {
         setSucces(true);
       }
     } catch (error) {
+      console.log("🚀 ~ handleSubmit ~ error:", error)
       setError(true);
     }
   };
