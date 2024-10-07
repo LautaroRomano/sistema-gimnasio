@@ -27,7 +27,7 @@ export type UserType = {
   isAdmin: boolean;
   password?: string;
   phone?: string | null;
-  createdAt: Date;
+  createdAt?: Date | null;
   updatedAt?: Date | null;
   deletedAt?: Date | null;
 };

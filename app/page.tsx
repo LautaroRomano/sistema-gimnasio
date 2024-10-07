@@ -10,26 +10,34 @@ import { GithubIcon } from "@/components/icons";
 import { Navbar } from "@/components/navbar";
 import { useEffect } from "react";
 import { verifyToken } from "./actions/users";
+import { useDispatch } from "react-redux";
+import { setUser, deleteUser, setSessionToken } from "@/lib/redux";
 
 export default function Home() {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const verToken = async (token: string) => {
     const res = await verifyToken(token);
-    console.log("🚀 ~ verToken ~ res:", res)
-    if(!res.success){
+
+    if (!res.success) {
+      dispatch(deleteUser());
       router.push("/login");
-    }else if(res.success.isAdmin){
+    } else {
+      dispatch(setUser({ user: res.success }));
+    }
+    if (res?.success?.isAdmin) {
       router.push("/dashboard");
     }
   };
 
   useEffect(() => {
     const token = localStorage.getItem("sessionToken");
-    if (!token || token.length === 0) {
-      router.push("/login");
-    } else {
+    if (token) {
+      dispatch(setSessionToken(token));
       verToken(token);
+    } else {
+      router.push("/login");
     }
   }, []);
 

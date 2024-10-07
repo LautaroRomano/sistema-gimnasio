@@ -4,38 +4,49 @@ import "react-toastify/dist/ReactToastify.css";
 import { verifyToken } from "../actions/users";
 import { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/react";
+import { useDispatch } from "react-redux";
+import { setUser, deleteUser, setSessionToken } from "@/lib/redux";
 
 export default function PricingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [loadingSession,setLoadingSession] = useState(true)
+  const [loadingSession, setLoadingSession] = useState(true);
+
+  const dispatch = useDispatch();
+
   const verToken = async (token: string) => {
     const res = await verifyToken(token);
     if (!res.success) {
-      return window.location.href = "/login";
+      dispatch(deleteUser());
+      return (window.location.href = "/login");
+    } else {
+      dispatch(setUser({ user: res.success }));
     }
-    setLoadingSession(false)
+    setLoadingSession(false);
   };
 
   useEffect(() => {
     const token = localStorage.getItem("sessionToken");
-    if (!token || token.length === 0) {
-      window.location.href = "/login";
+    if (token) {
+      dispatch(setSessionToken(token));
+      verToken(token); // Verifica el token
     } else {
-      verToken(token);
+      window.location.href = "/login";
     }
   }, []);
 
   return (
     <section className="flex flex-col items-center justify-center gap-4">
       <div className="inline-block w-screen text-center justify-center">
-        {loadingSession ?
-        <div className="flex w-screen h-screen justify-center items-center">
-          <Spinner/>
-        </div>
-        : children}
+        {loadingSession ? (
+          <div className="flex w-screen h-screen justify-center items-center">
+            <Spinner />
+          </div>
+        ) : (
+          children
+        )}
         <ToastContainer />
       </div>
     </section>

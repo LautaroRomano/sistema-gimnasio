@@ -9,51 +9,48 @@ import {
   Link,
   Spinner,
 } from "@nextui-org/react";
-import { Suspense, useEffect, useState } from "react";
+import { useState } from "react";
 import { FaCheckCircle, FaEye, FaEyeSlash } from "react-icons/fa";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { loginUser } from "../actions/users";
+import { useDispatch } from "react-redux";
+import { setUser, setSessionToken } from "@/lib/redux";
 
-function LoginPage() {
+export default function LoginPage() {
   const [dni, setDni] = useState("");
   const [password, setPassword] = useState("");
   const [success, setSucces] = useState(false);
   const [error, setError] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
+  const [loadingSession, setLoadingSession] = useState(true);
+
+  const dispatch = useDispatch();
+
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const param1 = searchParams.get("error");
-
-    if (param1) toast.error(param1, { autoClose: false });
-
-    // Puedes usar los parámetros según sea necesario
-  }, [searchParams]);
 
   const handleSubmit = async () => {
     if (dni.length === 0 || password.length === 0)
       return toast.error("Debe completar todos los campos");
+
+    setLoadingSession(true);
     try {
       const user = await loginUser({ dni, password });
       if (user.error) {
         return toast.error(user.error);
       }
-      if(user.token){
-        localStorage.setItem('sessionToken',user.token);
-        const lastUrl = localStorage.getItem("lastUrl");
-        if (typeof lastUrl === "string") {
-          router.push(lastUrl);
-        } else {
-          router.push("/");
-        }
+      if (user.success && user.token) {
+        dispatch(setUser({ user: user.success }));
+        dispatch(setSessionToken(user.token));
+        localStorage.setItem("sessionToken", user.token);//Guardar el token en el localStorage
+        router.push("/");
         setSucces(true);
       }
     } catch (error) {
-      console.log("🚀 ~ handleSubmit ~ error:", error)
       setError(true);
+    } finally {
+      setLoadingSession(false);
     }
   };
 
@@ -121,13 +118,5 @@ function LoginPage() {
         </CardFooter>
       </Card>
     </div>
-  );
-}
-
-export default function Home() {
-  return (
-    <Suspense>
-      <LoginPage />
-    </Suspense>
   );
 }

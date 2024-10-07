@@ -13,6 +13,15 @@ export const verifyToken = async (token: string) => {
     if (typeof verify !== "string" && (verify as JwtPayload).user) {
       const myUser = await prisma.users.findFirst({
         where: { id: (verify as JwtPayload).user.id },
+        select: {
+          id: true,
+          dni: true,
+          email: true,
+          isAdmin: true,
+          name: true,
+          password: true,
+          phone: true,
+        },
       });
       if (myUser) return { success: myUser };
       else return { error: "Usuario no encontrado" };
@@ -35,6 +44,15 @@ export const loginUser = async ({
 
     const userDni = await prisma.users.findFirst({
       where: { dni: dni },
+      select: {
+        id: true,
+        dni: true,
+        email: true,
+        isAdmin: true,
+        name: true,
+        password: true,
+        phone: true,
+      },
     });
 
     if (!userDni) return { error: "Usuario no encontrado!" };
@@ -57,7 +75,6 @@ export const loginUser = async ({
 
     return { error: "Contraseña incorrecta" };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
@@ -184,7 +201,6 @@ export const getUsers = async (search: string | null) => {
 
     return { success: data };
   } catch (error) {
-    console.log("🚀 ~ getUsers ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
