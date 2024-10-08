@@ -10,12 +10,16 @@ import { GithubIcon } from "@/components/icons";
 import { Navbar } from "@/components/navbar";
 import { useEffect } from "react";
 import { verifyToken } from "./actions/users";
-import { useDispatch } from "react-redux";
-import { setUser, deleteUser, setSessionToken } from "@/lib/redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, deleteUser, setSessionToken, RootState } from "@/lib/redux";
+import CompleteProfile from "@/components/CompleteProfile";
 
 export default function Home() {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const user = useSelector((state:RootState)=>state.user);
+  const sessionToken = useSelector((state:RootState)=>state.sessionToken);
 
   const verToken = async (token: string) => {
     const res = await verifyToken(token);
@@ -40,6 +44,12 @@ export default function Home() {
       router.push("/login");
     }
   }, []);
+
+  if(user && !user.wasEdited){
+    return(
+      <CompleteProfile user={user} refresh={()=>verToken(sessionToken||'')}/>
+    )
+  }
 
   return (
     <section className="flex flex-col items-center justify-center gap-4">

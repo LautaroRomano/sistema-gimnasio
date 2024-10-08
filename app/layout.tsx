@@ -1,4 +1,6 @@
 import "@/styles/globals.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
 
@@ -43,6 +45,7 @@ export default function RootLayout({
           <div className="relative flex flex-col h-screen">
             <main className="light container mx-auto max-w-7xl px-6 flex-grow">
               {children}
+        <ToastContainer />
             </main>
           </div>
         </Providers>

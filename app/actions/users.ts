@@ -21,6 +21,10 @@ export const verifyToken = async (token: string) => {
           name: true,
           password: true,
           phone: true,
+          gender:true,
+          height:true,
+          weight:true,
+          wasEdited:true,
         },
       });
       if (myUser) return { success: myUser };
@@ -86,6 +90,11 @@ export const createUser = async ({
   email,
   password,
   phone,
+  gender,
+  height,
+  weight,
+  isAdmin,
+  wasEdited
 }: UserType) => {
   try {
     let hashedPassword = null;
@@ -126,6 +135,11 @@ export const createUser = async ({
           name,
           email,
           phone,
+          gender,
+          height:height?height*1:null,
+          weight:weight?weight*1:null,
+          //isAdmin,
+          wasEdited:!!wasEdited,
           ...updatePassword,
         },
         where: { id },
@@ -134,6 +148,7 @@ export const createUser = async ({
 
     return { success: true };
   } catch (error) {
+    console.log("🚀 ~ error:", error)
     return { error: "Ocurrio un error" };
   }
 };

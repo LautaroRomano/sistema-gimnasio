@@ -129,10 +129,6 @@ export default function DashboardPage() {
                           <MdEmail />
                           {item.email}
                         </div>
-                        <div className=" flex gap-2 items-center">
-                          <FaPlus />
-                          {new Date(item.createdAt).toLocaleDateString()}
-                        </div>
                         {item.updatedAt && (
                           <div className=" flex gap-2 items-center">
                             <IoMdCreate />

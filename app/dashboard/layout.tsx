@@ -1,6 +1,4 @@
 "use client";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { verifyToken } from "../actions/users";
 import { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/react";
@@ -50,7 +48,6 @@ export default function PricingLayout({
         ) : (
           children
         )}
-        <ToastContainer />
       </div>
     </section>
   );

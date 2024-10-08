@@ -12,7 +12,7 @@ export type ExerciseType = {
   type: string;
   value: string;
   series: number;
-  success?: boolean|null;
+  success?: boolean | null;
   createdAt: Date;
   updatedAt?: Date | null;
   deletedAt?: Date | null;
@@ -27,6 +27,10 @@ export type UserType = {
   isAdmin: boolean;
   password?: string;
   phone?: string | null;
+  gender?: string | null;
+  height?: number | null;
+  weight?: number | null;
+  wasEdited?: boolean | null;
   createdAt?: Date | null;
   updatedAt?: Date | null;
   deletedAt?: Date | null;
