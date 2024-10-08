@@ -23,6 +23,9 @@ export default function PricingLayout({
       return (window.location.href = "/login");
     } else {
       dispatch(setUser({ user: res.success }));
+      if (!res.success?.isAdmin) {
+        window.location.href = "/";
+      }
     }
     setLoadingSession(false);
   };
@@ -38,7 +41,7 @@ export default function PricingLayout({
   }, []);
 
   return (
-    <section className="flex flex-col items-center justify-center gap-4">
+    <section className="dark flex flex-col items-center justify-center gap-4">
       <div className="inline-block w-screen text-center justify-center">
         {loadingSession ? (
           <div className="flex w-screen h-screen justify-center items-center">

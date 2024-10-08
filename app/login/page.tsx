@@ -43,7 +43,7 @@ export default function LoginPage() {
       if (user.success && user.token) {
         dispatch(setUser({ user: user.success }));
         dispatch(setSessionToken(user.token));
-        localStorage.setItem("sessionToken", user.token);//Guardar el token en el localStorage
+        localStorage.setItem("sessionToken", user.token); //Guardar el token en el localStorage
         router.push("/");
         setSucces(true);
       }
@@ -55,15 +55,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full mt-36">
-      <Card className="mb-4 w-full my-5">
-        <CardHeader className="justify-center">
-          <div className="flex gap-5 w-full justify-center">
-            <h1 className="text-3xl font-bold">Ingresar a tu cuenta</h1>
-          </div>
-        </CardHeader>
+    <div className="flex flex-col w-full mt-36 gap-4 justify-center items-center">
+      <h1 className="text-xl flex font-bold">Bienvenido</h1>
+      <p className="text-md flex">¡Tu mejor versión comienza hoy!</p>
+      <Card className="mb-4 w-full my-5 flex rounded-none bg-primary">
+        <CardHeader className="justify-center"></CardHeader>
 
-        <CardBody className="px-3 pt-0 text-small text-default-400 items-center gap-2">
+        <CardBody className="px-3 pt-0 text-small text-default-400 items-center gap-4">
           <Input
             placeholder="DNI"
             value={dni}
@@ -78,6 +76,7 @@ export default function LoginPage() {
               <Button
                 color={isVisible ? "primary" : "default"}
                 isIconOnly
+                variant="bordered"
                 onPress={() => setIsVisible((prev) => !prev)}
                 className="m-2"
                 size="sm"
@@ -91,32 +90,31 @@ export default function LoginPage() {
 
           {error && <h5 className="text-red-600">Ocurrio un error: {error}</h5>}
         </CardBody>
-        <CardFooter>
-          <div className="w-full justify-center">
-            {success ? (
-              <Button
-                as={Link}
-                className="w-full max-w-xs mb-5 mt-2"
-                color="success"
-                href="/"
-                startContent={<FaCheckCircle />}
-              >
-                Listo
-              </Button>
-            ) : (
-              <Button
-                className="w-full max-w-xs mb-5 mt-2"
-                color="primary"
-                disabled={dni.length === 0 || password.length === 0}
-                size="md"
-                onPress={handleSubmit}
-              >
-                Iniciar sesion
-              </Button>
-            )}
-          </div>
-        </CardFooter>
+        <CardFooter></CardFooter>
       </Card>
+      <div className="w-full justify-center">
+        {success ? (
+          <Button
+            as={Link}
+            className="w-full max-w-xs mb-5 mt-2"
+            color="success"
+            href="/"
+            startContent={<FaCheckCircle />}
+          >
+            Listo
+          </Button>
+        ) : (
+          <Button
+            className="w-full max-w-xs mb-5 mt-2"
+            color="primary"
+            disabled={dni.length === 0 || password.length === 0}
+            size="md"
+            onPress={handleSubmit}
+          >
+            Iniciar sesion
+          </Button>
+        )}
+      </div>
     </div>
   );
 }
