@@ -45,25 +45,33 @@ export const create = async (
   }
 };
 
-export const getRoutines = async (id: number, date: Date) => {
+export const finish = async (id:number) => {
   try {
-    const startDate = startOfDay(date);
-    const endDate = endOfDay(date);
-
-    const routines = await prisma.routines.findFirst({
-      where: {
-        userId: id,
-        date: {
-          gte: startDate,
-          lt: endDate,
+      await prisma.routineExercises.update({
+        data: {
+         success:true
         },
-      },
-      include: {
-        exercises: true,
-      },
+        where:{
+          id:id
+        }
+      });
+    return { success: true };
+  } catch (error) {
+    console.log("🚀 ~ error:", error);
+    return { error: "Ocurrio un error" };
+  }
+};
+
+export const getExercise = async (exerciseId: number) => {
+  try {
+
+    const exercise = await prisma.routineExercises.findFirst({
+      where: {
+        id:exerciseId
+      }
     });
 
-    return { success: routines };
+    return { success: exercise };
   } catch (error) {
     console.log("🚀 ~ error:", error);
     return { error: "Ocurrió un error" };

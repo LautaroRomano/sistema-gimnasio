@@ -38,14 +38,18 @@ export default function RootLayout({
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
+          fontSans.variable
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col h-screen">
             <main className="light container mx-auto max-w-7xl px-6 flex-grow">
-              {children}
-        <ToastContainer />
+              <section className="flex  flex-col items-center justify-center gap-4">
+                <div className="inline-block w-screen text-center justify-center max-w-xl">
+                  {children}
+                </div>
+              </section>
+              <ToastContainer />
             </main>
           </div>
         </Providers>

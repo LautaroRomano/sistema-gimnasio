@@ -1,25 +1,57 @@
 "use client";
-import { Link } from "@nextui-org/link";
-import { Snippet } from "@nextui-org/snippet";
-import { Code } from "@nextui-org/code";
-import { button as buttonStyles } from "@nextui-org/theme";
 import { useRouter } from "next/navigation";
-import { siteConfig } from "@/config/site";
-import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
-import { Navbar } from "@/components/navbar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { verifyToken } from "./actions/users";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, deleteUser, setSessionToken, RootState } from "@/lib/redux";
 import CompleteProfile from "@/components/CompleteProfile";
+import { Button } from "@nextui-org/button";
+import { MdAccountCircle } from "react-icons/md";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { Spinner, Image } from "@nextui-org/react";
+import { RoutineType } from "@/types";
+import { toast } from "react-toastify";
+import { getRoutines } from "./actions/routines";
+
+const initRoutines: RoutineType | null = null;
 
 export default function Home() {
+  const [date, setDate] = useState(new Date());
+  const [routine, setRoutine] = useState(initRoutines);
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const user = useSelector((state:RootState)=>state.user);
-  const sessionToken = useSelector((state:RootState)=>state.sessionToken);
+  const user = useSelector((state: RootState) => state.user);
+  const sessionToken = useSelector((state: RootState) => state.sessionToken);
+
+  const handleChangeNextDay = () => {
+    const nextDay = new Date(date);
+    nextDay.setDate(date.getDate() + 1);
+    setDate(nextDay);
+  };
+
+  const handleChangePreviousDay = () => {
+    const previousDay = new Date(date);
+    previousDay.setDate(date.getDate() - 1);
+    setDate(previousDay);
+  };
+
+  const findRoutine = async () => {
+    if (!user || !date) return;
+    setLoading(true);
+    const res = await getRoutines(user.id, date);
+    setLoading(false);
+    if (res.error) return toast.error(res.error);
+    if (res.success) {
+      setRoutine(res.success);
+    }
+  };
+
+  useEffect(() => {
+    findRoutine();
+  }, [date, user]);
 
   const verToken = async (token: string) => {
     const res = await verifyToken(token);
@@ -45,56 +77,132 @@ export default function Home() {
     }
   }, []);
 
-  if(user && !user.wasEdited){
-    return(
-      <CompleteProfile user={user} refresh={()=>verToken(sessionToken||'')}/>
-    )
+  if (user && !user.wasEdited) {
+    return (
+      <CompleteProfile
+        user={user}
+        refresh={() => verToken(sessionToken || "")}
+      />
+    );
   }
 
   return (
-    <section className="flex flex-col items-center justify-center gap-4">
-      <Navbar />
-      <div className="inline-block max-w-xl text-center justify-center">
-        <span className={title()}>Make&nbsp;</span>
-        <span className={title({ color: "violet" })}>beautiful&nbsp;</span>
-        <br />
-        <span className={title()}>
-          websites regardless of your design experience.
-        </span>
-        <div className={subtitle({ class: "mt-4" })}>
-          Beautiful, fast and modern React UI library.
+    <section className="flex flex-col items-center justify-center gap-4 h-screen overflow-y-auto">
+      <div className="flex w-full items-center justify-between gap-2 px-4 mt-8">
+        <div className="flex flex-col items-start">
+          <h1 className={"text-2xl font-bold text-primary-500"}>
+            Hola, Lautaro
+          </h1>
+          <span>Es hora de desafiar tus límites.</span>
+        </div>
+        <div className="flex">
+          <Button
+            size="sm"
+            isIconOnly
+            as={"a"}
+            href="/profile"
+            className="bg-transparent text-primary-500"
+          >
+            <MdAccountCircle size={24} />
+          </Button>
         </div>
       </div>
 
-      <div className="flex gap-3">
-        <Link
-          isExternal
-          className={buttonStyles({
-            color: "primary",
-            radius: "full",
-            variant: "shadow",
-          })}
-          href={siteConfig.links.docs}
-        >
-          Documentation
-        </Link>
-        <Link
-          isExternal
-          className={buttonStyles({ variant: "bordered", radius: "full" })}
-          href={siteConfig.links.github}
-        >
-          <GithubIcon size={20} />
-          GitHub
-        </Link>
+      <div className="flex w-full items-center justify-between gap-2 px-4 mt-8">
+        <div className="flex items-start">
+          <Button
+            startContent={<IoIosArrowBack />}
+            className="bg-transparent"
+            color="primary"
+            onPress={handleChangePreviousDay}
+          >
+            Anterior
+          </Button>
+        </div>
+        <div className="flex">
+          {date.toString().split(" ")[1]} {date.toString().split(" ")[2]}
+        </div>
+        <div className="flex items-start">
+          <Button
+            endContent={<IoIosArrowForward />}
+            className="bg-transparent"
+            color="primary"
+            onPress={handleChangeNextDay}
+          >
+            Siguiente
+          </Button>
+        </div>
       </div>
 
-      <div className="mt-8">
-        <Snippet hideCopyButton hideSymbol variant="bordered">
-          <span>
-            Get started by editing <Code color="primary">app/page.tsx</Code>
-          </span>
-        </Snippet>
-      </div>
+      {loading ? (
+        <div className="flex w-full h-full items-center justify-center">
+          <Spinner />
+        </div>
+      ) : routine && routine.exercises.length > 0 ? (
+        <div className="flex flex-col w-full h-full items-center justify-start gap-2 pb-8">
+          {routine.exercises
+            .filter((ex) => !ex.success)
+            .map((ex, i) => {
+              return (
+                <button
+                  key={ex.id}
+                  className="bg-primary-500 w-full h-[150px] px-8 py-2"
+                  onClick={() => router.push(`/exercise/${ex.id}`)}
+                >
+                  <div className="flex w-full h-full rounded-2xl bg-backgroundComponents overflow-hidden justify-between">
+                    <div className="flex flex-col w-2/3 items-center justify-center">
+                      <span className="flex text-3xl font-bold">{i + 1}</span>
+                      <span className="flex text-lg font-semibold">
+                        {ex.name}
+                      </span>
+                    </div>
+                    <div className="flex w-1/3 max-h-full items-center justify-end">
+                      <Image
+                        alt={ex.name || ""}
+                        className="z-0 h-full object-contain rounded-2xl"
+                        src={ex.img || ""}
+                      />
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          <div className="flex my-4">
+            <h2>Terminados</h2>
+          </div>
+          {routine.exercises
+            .filter((ex) => ex.success)
+            .map((ex, i) => {
+              return (
+                <button
+                  key={ex.id}
+                  className="bg-primary-500 w-full h-[150px] px-8 py-2"
+                  onClick={() => router.push(`/exercise/${ex.id}`)}
+                >
+                  <div className="flex w-full h-full rounded-2xl bg-backgroundComponents overflow-hidden justify-between">
+                    <div className="flex flex-col w-2/3 items-center justify-center">
+                      <span className="flex text-3xl font-bold">{i + 1}</span>
+                      <span className="flex text-lg font-semibold">
+                        {ex.name}
+                      </span>
+                    </div>
+                    <div className="flex w-1/3 max-h-full items-center justify-end">
+                      <Image
+                        alt={ex.name || ""}
+                        className="z-0 h-full object-contain rounded-2xl"
+                        src={ex.img || ""}
+                      />
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+        </div>
+      ) : (
+        <div className="flex w-full h-full items-center justify-center">
+          <span>No tienes rutinas para hoy!</span>
+        </div>
+      )}
     </section>
   );
 }
