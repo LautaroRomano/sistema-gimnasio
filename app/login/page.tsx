@@ -74,7 +74,7 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             endContent={
               <Button
-                color={isVisible ? "primary" : "default"}
+                color={isVisible ? "secondary" : "default"}
                 isIconOnly
                 variant="bordered"
                 onPress={() => setIsVisible((prev) => !prev)}
@@ -105,11 +105,12 @@ export default function LoginPage() {
           </Button>
         ) : (
           <Button
-            className="w-full max-w-xs mb-5 mt-2"
+            className="w-full max-w-xs mb-5 mt-2 text-default-900 font-bold"
             color="primary"
-            disabled={dni.length === 0 || password.length === 0}
+            disabled={dni.length === 0 || password.length === 0 || loadingSession}
             size="md"
             onPress={handleSubmit}
+            isLoading={loadingSession}
           >
             Iniciar sesion
           </Button>

@@ -12,6 +12,7 @@ import { Spinner, Image } from "@nextui-org/react";
 import { RoutineType } from "@/types";
 import { toast } from "react-toastify";
 import { getRoutines } from "./actions/routines";
+import { IoMdExit } from "react-icons/io";
 
 const initRoutines: RoutineType | null = null;
 
@@ -50,7 +51,9 @@ export default function Home() {
   };
 
   useEffect(() => {
-    findRoutine();
+    if (user) {
+      findRoutine();
+    }
   }, [date, user]);
 
   const verToken = async (token: string) => {
@@ -95,7 +98,7 @@ export default function Home() {
           </h1>
           <span>Es hora de desafiar tus límites.</span>
         </div>
-        <div className="flex">
+        <div className="flex gap-2">
           <Button
             size="sm"
             isIconOnly
@@ -104,6 +107,16 @@ export default function Home() {
             className="bg-transparent text-primary-500"
           >
             <MdAccountCircle size={24} />
+          </Button>
+          <Button
+            size="sm"
+            className="bg-transparent text-primary-500"
+            onPress={() => {
+              dispatch(deleteUser());
+              router.push("/login");
+            }}
+          >
+            <IoMdExit size={24} />
           </Button>
         </div>
       </div>
@@ -146,20 +159,21 @@ export default function Home() {
               return (
                 <button
                   key={ex.id}
-                  className="bg-primary-500 w-full h-[150px] px-8 py-2"
+                  className="bg-primary-500 w-full h-[150px] px-8 items-center"
                   onClick={() => router.push(`/exercise/${ex.id}`)}
                 >
-                  <div className="flex w-full h-full rounded-2xl bg-backgroundComponents overflow-hidden justify-between">
-                    <div className="flex flex-col w-2/3 items-center justify-center">
-                      <span className="flex text-3xl font-bold">{i + 1}</span>
-                      <span className="flex text-lg font-semibold">
+                  <div className="flex w-full h-[135px] rounded-2xl bg-backgroundComponents overflow-hidden justify-between hover:opacity-90">
+                    <div className="flex flex-col w-full items-center justify-center">
+                      <span className="flex text-2xl font-bold">{i + 1}</span>
+                      <span className="flex text-md font-semibold">
                         {ex.name}
                       </span>
                     </div>
-                    <div className="flex w-1/3 max-h-full items-center justify-end">
+                    <div className="flex  h-[135px] items-center justify-end">
                       <Image
+                        height={"230px"}
                         alt={ex.name || ""}
-                        className="z-0 h-full object-contain rounded-2xl"
+                        className="z-10 object-contain rounded-2xl"
                         src={ex.img || ""}
                       />
                     </div>
@@ -167,29 +181,32 @@ export default function Home() {
                 </button>
               );
             })}
-          <div className="flex my-4">
-            <h2>Terminados</h2>
-          </div>
+          {routine.exercises.filter((ex) => ex.success).length > 0 && (
+            <div className="flex my-4">
+              <h2>Terminados</h2>
+            </div>
+          )}
           {routine.exercises
             .filter((ex) => ex.success)
             .map((ex, i) => {
               return (
                 <button
                   key={ex.id}
-                  className="bg-primary-500 w-full h-[150px] px-8 py-2"
+                  className="bg-primary-500 w-full h-[150px] px-8 items-center"
                   onClick={() => router.push(`/exercise/${ex.id}`)}
                 >
-                  <div className="flex w-full h-full rounded-2xl bg-backgroundComponents overflow-hidden justify-between">
-                    <div className="flex flex-col w-2/3 items-center justify-center">
-                      <span className="flex text-3xl font-bold">{i + 1}</span>
-                      <span className="flex text-lg font-semibold">
+                  <div className="flex w-full h-[135px] rounded-2xl bg-backgroundComponents overflow-hidden justify-between hover:opacity-90">
+                    <div className="flex flex-col w-full items-center justify-center">
+                      <span className="flex text-2xl font-bold">{i + 1}</span>
+                      <span className="flex text-md font-semibold">
                         {ex.name}
                       </span>
                     </div>
-                    <div className="flex w-1/3 max-h-full items-center justify-end">
+                    <div className="flex  h-[135px] items-center justify-end">
                       <Image
+                        height={"230px"}
                         alt={ex.name || ""}
-                        className="z-0 h-full object-contain rounded-2xl"
+                        className="z-0 object-contain rounded-2xl"
                         src={ex.img || ""}
                       />
                     </div>

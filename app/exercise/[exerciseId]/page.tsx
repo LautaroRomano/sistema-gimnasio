@@ -33,12 +33,15 @@ export default function Home() {
     setLoading(false);
     if (res.error) return toast.error(res.error);
     if (res.success) {
+      console.log('setExercises')
       setExercise(res.success);
     }
   };
 
   useEffect(() => {
-    findExercise();
+    if(user && !exercise){
+      findExercise();
+    }
   }, [user]);
 
   const verToken = async (token: string) => {
@@ -80,8 +83,8 @@ export default function Home() {
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 h-screen overflow-y-auto">
-      <div className="flex w-full items-center justify-between gap-2 px-4 mt-8">
-        <div className="flex flex-col items-start">
+      <div className="flex w-full items-center justify-between gap-2 px-0 mt-8">
+        <div className="flex flex-col items-start mt-8">
           <Button
             startContent={
               <strong className="text-primary-500">
