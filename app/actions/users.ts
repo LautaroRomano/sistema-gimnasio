@@ -234,6 +234,17 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
       )
     );
 
+    const mindOfDay = new Date(
+      Date.UTC(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+        12,
+        0,
+        0
+      )
+    );
+
     const endOfDay = new Date(
       Date.UTC(
         date.getUTCFullYear(),
@@ -266,7 +277,7 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
         data: {
           name: `Rutina ${date.toLocaleDateString()}`,
           userId: user_id,
-          date: startOfDay, // Establece la fecha como la medianoche de ese día
+          date: mindOfDay, // Establece la fecha 
         },
       });
     }

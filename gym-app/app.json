@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "RedApuntes",
-    "slug": "RedApuntes",
+    "name": "CHINOALMIRON",
+    "slug": "CHINOALMIRON",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1d2738"
     },
     "ios": {
       "supportsTablet": true
@@ -18,9 +18,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#1d2738"
       },
-      "package": "com.lautaroromano.RedApuntes"
+      "package": "com.lautaroromano.CHINOALMIRON"
     },
     "web": {
       "bundler": "metro",
@@ -35,7 +35,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "e9d72f25-72e2-4e46-b274-03eefcb67f3f"
+        "projectId": "350161dc-5bbd-4e1f-b80e-34d9abcfd92e"
       }
     }
   }

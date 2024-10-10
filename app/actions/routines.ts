@@ -1,6 +1,5 @@
 "use server";
 import { PrismaClient } from "@prisma/client";
-import { startOfDay, endOfDay } from "date-fns";
 
 import { ExerciseType } from "@/types";
 
@@ -47,15 +46,34 @@ export const create = async (
 
 export const getRoutines = async (id: number, date: Date) => {
   try {
-    const startDate = startOfDay(date);
-    const endDate = endOfDay(date);
+    const startOfDay = new Date(
+      Date.UTC(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+        0,
+        0,
+        0
+      )
+    );
+    const endOfDay = new Date(
+      Date.UTC(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+        23,
+        59,
+        59,
+        999
+      )
+    );
 
     const routines = await prisma.routines.findFirst({
       where: {
         userId: id,
         date: {
-          gte: startDate,
-          lt: endDate,
+          gte: startOfDay,
+          lt: endOfDay,
         },
       },
       include: {

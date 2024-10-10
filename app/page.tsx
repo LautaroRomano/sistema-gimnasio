@@ -160,7 +160,7 @@ export default function Home() {
               return (
                 <button
                   key={ex.id}
-                  className="bg-primary-500 w-full h-[150px] px-8 items-center"
+                  className="bg-primary w-full h-[150px] px-8 items-center"
                   onClick={() => router.push(`/exercise/${ex.id}`)}
                 >
                   <div className="flex w-full h-[135px] rounded-2xl bg-backgroundComponents overflow-hidden justify-between hover:opacity-90">
@@ -171,10 +171,9 @@ export default function Home() {
                       </span>
                     </div>
                     <div className="flex  h-[135px] items-center justify-end">
-                      <Image
-                        height={"230px"}
+                    <img
                         alt={ex.name || ""}
-                        className="z-10 object-contain rounded-2xl"
+                        className="z-10 object-contain rounded-none w-60 min-h-full"
                         src={ex.img || ""}
                       />
                     </div>
@@ -193,7 +192,7 @@ export default function Home() {
               return (
                 <button
                   key={ex.id}
-                  className="bg-primary-500 w-full h-[150px] px-8 items-center"
+                  className="bg-primary w-full h-[150px] px-8 items-center"
                   onClick={() => router.push(`/exercise/${ex.id}`)}
                 >
                   <div className="flex w-full h-[135px] rounded-2xl bg-backgroundComponents overflow-hidden justify-between hover:opacity-90">
@@ -204,10 +203,9 @@ export default function Home() {
                       </span>
                     </div>
                     <div className="flex  h-[135px] items-center justify-end">
-                      <Image
-                        height={"230px"}
+                    <img
                         alt={ex.name || ""}
-                        className="z-0 object-contain rounded-2xl"
+                        className="z-10 object-contain rounded-none w-60 min-h-full"
                         src={ex.img || ""}
                       />
                     </div>
