@@ -84,14 +84,14 @@ export default function Home() {
   return (
     <section className="flex flex-col items-center justify-center gap-4 h-screen overflow-y-auto">
       <div className="flex w-full items-center justify-between gap-2 px-0 mt-8">
-        <div className="flex flex-col items-start mt-8">
+        <div className="flex flex-col items-start mt-16">
           <Button
             startContent={
-              <strong className="text-primary-500">
+              <strong className="text-primary">
                 <IoIosArrowBack size={19} />
               </strong>
             }
-            className="bg-transparent"
+            className="bg-transparent text-default-900 font-bold"
             color="primary"
             onPress={() => router.push("/")}
           >
@@ -106,18 +106,17 @@ export default function Home() {
         </div>
       ) : exercise ? (
         <div className="flex flex-col w-full h-full items-center justify-start gap-2 pb-8">
-          <div className="flex w-full justify-center items-center bg-primary-500 py-5 px-2">
+          <div className="flex w-full justify-center items-center py-5 px-2">
             <Image
-              width={320}
               src={exercise.img || ""}
               alt={exercise.name || ""}
               className="flex"
             />
           </div>
           <div className="flex w-full justify-center items-center py-8 px-4">
-            <div className="flex flex-col items-center justify-center bg-white text-[#262626] w-[320px] rounded-2xl px-4 py-8 gap-8">
+            <div className="flex flex-col items-center justify-center bg-white text-[#262626] rounded-2xl w-2/3 px-4 py-8 gap-8">
               <span className="font-bold text-lg">
-                {exercise.name} Plancha con giro de cadera
+                {exercise.name}
               </span>
               <div className="flex justify-evenly items-center text-sm w-full">
                 <div className="flex gap-1 text-sm items-center">
@@ -136,9 +135,10 @@ export default function Home() {
           </div>
           <div className="flex w-full justify-center items-center py-8 px-4">
             <Button
-              className="flex flex-col items-center justify-center bg-white text-[#262626] rounded-3xl  py-6 px-10"
+              className="flex flex-col items-center justify-center  text-[#262626] rounded-3xl  py-6 px-10"
               isDisabled={!!exercise.success}
               onPress={handleFinish}
+              color="primary"
             >
               <p className="font-bold text-lg">
                 {exercise.success ? "Terminado" : "Finalizar"}

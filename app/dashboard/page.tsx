@@ -209,7 +209,8 @@ export default function DashboardPage() {
                 {searchUser && searchUser.length > 0 && (
                   <Button
                     isIconOnly
-                    className="rounded-full"
+                    className="rounded-full text-default-100 font-bold"
+                    color="primary"
                     size="sm"
                     onPress={() => {
                       setSearchUser(null);
@@ -221,6 +222,7 @@ export default function DashboardPage() {
                 )}
                 <Button
                   color="primary"
+                  className="text-default-100 font-bold"
                   size="sm"
                   onPress={() => getUsersList(searchUser)}
                 >

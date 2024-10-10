@@ -93,7 +93,7 @@ export default function Home() {
     <section className="flex flex-col items-center justify-center gap-4 h-screen overflow-y-auto">
       <div className="flex w-full items-center justify-between gap-2 px-4 mt-8">
         <div className="flex flex-col items-start">
-          <h1 className={"text-2xl font-bold text-primary-500"}>
+          <h1 className={"text-2xl font-bold text-primary"}>
             Hola, Lautaro
           </h1>
           <span>Es hora de desafiar tus límites.</span>
@@ -104,13 +104,13 @@ export default function Home() {
             isIconOnly
             as={"a"}
             href="/profile"
-            className="bg-transparent text-primary-500"
+            className="bg-transparent text-primary"
           >
             <MdAccountCircle size={24} />
           </Button>
           <Button
             size="sm"
-            className="bg-transparent text-primary-500"
+            className="bg-transparent text-primary"
             onPress={() => {
               dispatch(deleteUser());
               router.push("/login");
@@ -125,7 +125,7 @@ export default function Home() {
         <div className="flex items-start">
           <Button
             startContent={<IoIosArrowBack />}
-            className="bg-transparent"
+            className="bg-transparent text-default-900 font-bold"
             color="primary"
             onPress={handleChangePreviousDay}
           >
@@ -138,7 +138,7 @@ export default function Home() {
         <div className="flex items-start">
           <Button
             endContent={<IoIosArrowForward />}
-            className="bg-transparent"
+            className="bg-transparent text-default-900 font-bold"
             color="primary"
             onPress={handleChangeNextDay}
           >
@@ -146,6 +146,7 @@ export default function Home() {
           </Button>
         </div>
       </div>
+      <div className="flex w-full h-px bg-primary"></div>
 
       {loading ? (
         <div className="flex w-full h-full items-center justify-center">

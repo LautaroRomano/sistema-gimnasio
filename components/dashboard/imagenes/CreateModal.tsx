@@ -106,6 +106,7 @@ export default function CreateModal({
       <div className="absolute bottom-5 right-5">
         <Button
           color="primary"
+          className="text-default-100 font-bold"
           size="lg"
           startContent={<IoMdAdd />}
           onPress={onOpen}
@@ -155,6 +156,7 @@ export default function CreateModal({
                 </Button>
                 <Button
                   color="primary"
+                  className="text-default-100 font-bold"
                   size="sm"
                   disabled={loading}
                   onPress={() => {

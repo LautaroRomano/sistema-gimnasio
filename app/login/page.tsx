@@ -24,7 +24,7 @@ export default function LoginPage() {
   const [error, setError] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  const [loadingSession, setLoadingSession] = useState(true);
+  const [loadingSession, setLoadingSession] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -55,7 +55,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col w-full mt-36 gap-4 justify-center items-center">
+    <div className="flex flex-col w-full gap-4 justify-center items-center mt-36">
       <h1 className="text-xl flex font-bold">Bienvenido</h1>
       <p className="text-md flex">¡Tu mejor versión comienza hoy!</p>
       <Card className="mb-4 w-full my-5 flex rounded-none bg-primary">

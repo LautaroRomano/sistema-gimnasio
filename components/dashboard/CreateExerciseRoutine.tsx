@@ -96,6 +96,7 @@ export default function CreateExerciseRoutine({
     <>
       <Button
         color="primary"
+        className="text-default-100 font-bold"
         size="sm"
         startContent={<IoMdAdd />}
         onPress={onOpen}
@@ -185,6 +186,7 @@ export default function CreateExerciseRoutine({
                 </Button>
                 <Button
                   color="primary"
+                  className="text-default-100 font-bold"
                   size="sm"
                   onPress={() => {
                     handleSubmit();
@@ -229,7 +231,7 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
   return (
     <>
       <div className="flex gap-2 justify-center w-full py-2 px-4 items-center">
-        <Button color="primary" size="sm" variant="bordered" onPress={onOpen}>
+        <Button color="primary" className="text-default-900 font-bold" size="sm" variant="bordered" onPress={onOpen}>
           Seleccionar desde una plantilla
         </Button>
       </div>

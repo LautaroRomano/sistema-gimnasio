@@ -95,6 +95,7 @@ export default function ImagesPage() {
                 )}
                 <Button
                   color="primary"
+                  className="text-default-100 font-bold"
                   size="sm"
                   onPress={() => getData(search)}
                 >

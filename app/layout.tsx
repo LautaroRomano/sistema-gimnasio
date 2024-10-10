@@ -43,9 +43,9 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col h-screen">
-            <main className="light container mx-auto max-w-7xl px-6 flex-grow">
+            <main className="container mx-auto max-w-7xl px-6 flex-grow">
               <section className="flex  flex-col items-center justify-center gap-4">
-                <div className="inline-block w-screen text-center justify-center max-w-xl">
+                <div className="inline-block w-screen text-center justify-center max-w-xl bg-myBg">
                   {children}
                 </div>
               </section>

@@ -87,6 +87,7 @@ export default function DashboardPage() {
                 )}
                 <Button
                   color="primary"
+                  className="text-default-100 font-bold"
                   size="sm"
                   onPress={() => getData(searchUser)}
                 >
@@ -152,7 +153,7 @@ export default function DashboardPage() {
                       </Button>
 
                       <Button
-                        className="flex"
+                        className="flex text-default-100 font-bold"
                         color="primary"
                         radius="full"
                         size="sm"

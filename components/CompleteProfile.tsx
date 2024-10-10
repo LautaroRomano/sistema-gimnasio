@@ -49,7 +49,6 @@ export default function CompleteProfile({
     setLoading(true);
 
     const res = await createUser(editUser);
-    console.log("🚀 ~ handleSubmit ~ res:", res)
 
     setLoading(false);
     if (res.error) {
@@ -66,7 +65,7 @@ export default function CompleteProfile({
       return;
     }
     if (res.success) {
-        toast.success('Completado!')
+      toast.success("Completado!");
       refresh();
     }
   };
@@ -84,7 +83,7 @@ export default function CompleteProfile({
       const newEditUser = { ...user };
       delete newEditUser.password;
       newEditUser.wasEdited = true;
-      newEditUser.gender = 'M';
+      newEditUser.gender = "M";
       setEditUser(newEditUser);
     }
   }, [user]);
@@ -132,20 +131,26 @@ export default function CompleteProfile({
                     onChange={handleChange}
                   />
                   <div className="flex flex-col text-sm">
-                <label htmlFor="gender" className="text-sm">Genero</label>
-                  <select
-                  id="gender"
-                    name="gender"
-                    value={editUser?.gender + ""}
-                    className="flex py-4 px-2 bg-[#18181B]"
-                    onChange={handleChange}
+                    <label htmlFor="gender" className="text-sm">
+                      Genero
+                    </label>
+                    <select
+                      id="gender"
+                      name="gender"
+                      value={editUser?.gender + ""}
+                      className="flex py-4 px-2 bg-[#18181B]"
+                      onChange={handleChange}
                     >
-                    <option value="">Seleccionar</option>
-                    <option value="M">Masculino</option>
-                    <option value="F">Femenino</option>
-                  </select>
-                      </div>
-                  {error==='gender'&&<p className="text-danger-500 text-sm">Debe ingresar el genero</p>}
+                      <option value="">Seleccionar</option>
+                      <option value="M">Masculino</option>
+                      <option value="F">Femenino</option>
+                    </select>
+                  </div>
+                  {error === "gender" && (
+                    <p className="text-danger-500 text-sm">
+                      Debe ingresar el genero
+                    </p>
+                  )}
                   <div className="flex gap-2">
                     <Input
                       errorMessage="Debe completar este campo"
@@ -184,6 +189,7 @@ export default function CompleteProfile({
               </ModalBody>
               <ModalFooter>
                 <Button
+                  className="text-default-100 font-bold"
                   color="primary"
                   onPress={handleSubmit}
                   isDisabled={loading}

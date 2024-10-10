@@ -14,7 +14,8 @@ module.exports = {
         mono: ["var(--font-mono)"],
       },
       colors: {
-        primary: "#ccfe04", // Define el color primary para uso global
+        primary: "#59e70a", // Define el color primary para uso global
+        myBg: "#1d2738",
       },
     },
   },
@@ -24,7 +25,8 @@ module.exports = {
       themes: {
         light: {
           colors: {
-            primary: "#ccfe04", // Usar el color primary en el tema light
+            primary: "#59e70a", // Usar el color primary en el tema light
+            myBg: "#1d2738",
           },
         },
         dark: {
@@ -32,7 +34,8 @@ module.exports = {
             backgroundBack: "#000",
             backgroundComponents: "#424242",
             text: "#ddd",
-            primary: "#ccfe04", // Usar el color primary en el tema dark
+            primary: "#59e70a", // Usar el color primary en el tema dark
+            myBg: "#1d2738",
           },
         },
       },
