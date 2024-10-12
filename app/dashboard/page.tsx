@@ -4,13 +4,13 @@ import { Button, DatePicker, Divider, Spinner, Input } from "@nextui-org/react";
 import { IoMdClose } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { toast } from "react-toastify";
 
 import { ExerciseType, RoutineType, UserType } from "@/types";
 import { getAUserRoutine, getUsers } from "@/app/actions/users";
 import { Drawer } from "@/components/dashboard/drawer";
 import TableRoutines from "@/components/dashboard/tableRoutines";
 import CreateExerciseRoutine from "@/components/dashboard/CreateExerciseRoutine";
-import { toast } from "react-toastify";
 
 const initData: UserType[] = [];
 const initRoutineData: RoutineType | null = null;
@@ -44,6 +44,7 @@ export default function DashboardPage() {
           progress: undefined,
           theme: "dark",
         });
+
         return;
       }
       if (res.success) setRoutine(res.success);
@@ -59,6 +60,7 @@ export default function DashboardPage() {
         progress: undefined,
         theme: "dark",
       });
+
       return;
     }
   };
@@ -77,6 +79,7 @@ export default function DashboardPage() {
         progress: undefined,
         theme: "dark",
       });
+
       return;
     }
     if (res.success) setUsers(res.success);
@@ -142,15 +145,14 @@ export default function DashboardPage() {
             <div className="flex flex-col justify-start items-center p-4 gap-4 h-full w-full flex-wrap">
               {routine && (
                 <CreateExerciseRoutine
+                  edit={edit}
                   refresh={() => getUserRoutine()}
                   routineId={routine?.id}
-                  edit={edit}
                   setEdit={setEdit}
                 />
               )}
               {routine?.exercises[0] && (
                 <TableRoutines
-                  setEdit={setEdit}
                   data={routine.exercises.map(
                     (
                       {
@@ -163,7 +165,7 @@ export default function DashboardPage() {
                         success,
                         ...data
                       },
-                      i
+                      i,
                     ) => ({
                       id: i + 1,
                       orden: i + 1,
@@ -186,8 +188,9 @@ export default function DashboardPage() {
                             ...data,
                           }),
                       },
-                    })
+                    }),
                   )}
+                  setEdit={setEdit}
                 />
               )}
             </div>
@@ -221,8 +224,8 @@ export default function DashboardPage() {
                   </Button>
                 )}
                 <Button
-                  color="primary"
                   className="text-default-100 font-bold"
+                  color="primary"
                   size="sm"
                   onPress={() => getUsersList(searchUser)}
                 >

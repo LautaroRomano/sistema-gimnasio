@@ -9,12 +9,12 @@ import {
 } from "@nextui-org/react";
 import { CiEdit } from "react-icons/ci";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { IoMdClose } from "react-icons/io";
 
 import CreateModal from "@/components/dashboard/imagenes/CreateModal";
 import { Drawer } from "@/components/dashboard/drawer";
 import { getImages } from "@/app/actions/exercicesConfig";
-import { toast } from "react-toastify";
-import { IoMdClose } from "react-icons/io";
 import { ImageType } from "@/types";
 
 const initData: ImageType[] = [];
@@ -43,10 +43,11 @@ export default function ImagesPage() {
         progress: undefined,
         theme: "dark",
       });
+
       return;
     }
     if (!res.success) {
-      toast.error('Ocurrió un error inesperado', {
+      toast.error("Ocurrió un error inesperado", {
         position: "top-right",
         autoClose: 2500,
         hideProgressBar: false,
@@ -56,6 +57,7 @@ export default function ImagesPage() {
         progress: undefined,
         theme: "dark",
       });
+
       return;
     }
     setData(res.success);
@@ -68,11 +70,7 @@ export default function ImagesPage() {
   return (
     <div className="flex gap-1 bg-backgroundBack w-screen h-screen relative">
       <Drawer />
-      <CreateModal
-            refresh={getData}
-            edit={edit}
-            setEdit={setEdit}
-          />
+      <CreateModal edit={edit} refresh={getData} setEdit={setEdit} />
       <div className="flex flex-col gap-1 w-screen h-full">
         <div className="flex justify-between px-5 items-center gap-8 bg-backgroundComponents rounded-md relative">
           <h1 className="text-lg py-4">Listado de Imagenes</h1>
@@ -94,8 +92,8 @@ export default function ImagesPage() {
                   </Button>
                 )}
                 <Button
-                  color="primary"
                   className="text-default-100 font-bold"
+                  color="primary"
                   size="sm"
                   onPress={() => getData(search)}
                 >
@@ -135,8 +133,12 @@ export default function ImagesPage() {
                           <p className="text-tiny text-white/60">{item.name}</p>
                         </div>
                       </div>
-                      <Button radius="full" size="sm" startContent={<CiEdit />}
-                      onPress={()=>setEdit(item)}>
+                      <Button
+                        radius="full"
+                        size="sm"
+                        startContent={<CiEdit />}
+                        onPress={() => setEdit(item)}
+                      >
                         Editar
                       </Button>
                     </CardFooter>

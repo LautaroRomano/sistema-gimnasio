@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export const create = async (
   { id, name, img, description, type, value, series }: ExerciseType,
-  routineId: number
+  routineId: number,
 ) => {
   try {
     if (id === 0) {
@@ -39,7 +39,6 @@ export const create = async (
 
     return { success: true };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
@@ -53,8 +52,8 @@ export const getRoutines = async (id: number, date: Date) => {
         date.getUTCDate(),
         0,
         0,
-        0
-      )
+        0,
+      ),
     );
     const endOfDay = new Date(
       Date.UTC(
@@ -64,8 +63,8 @@ export const getRoutines = async (id: number, date: Date) => {
         23,
         59,
         59,
-        999
-      )
+        999,
+      ),
     );
 
     const routines = await prisma.routines.findFirst({
@@ -83,7 +82,6 @@ export const getRoutines = async (id: number, date: Date) => {
 
     return { success: routines };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: "Ocurrió un error" };
   }
 };

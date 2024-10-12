@@ -1,6 +1,5 @@
 "use server";
 import { PrismaClient } from "@prisma/client";
-import { startOfDay, endOfDay } from "date-fns";
 
 import { ExerciseType } from "@/types";
 
@@ -8,7 +7,7 @@ const prisma = new PrismaClient();
 
 export const create = async (
   { id, name, img, description, type, value, series }: ExerciseType,
-  routineId: number
+  routineId: number,
 ) => {
   try {
     if (id === 0) {
@@ -40,40 +39,37 @@ export const create = async (
 
     return { success: true };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
 
-export const finish = async (id:number) => {
+export const finish = async (id: number) => {
   try {
-      await prisma.routineExercises.update({
-        data: {
-         success:true
-        },
-        where:{
-          id:id
-        }
-      });
+    await prisma.routineExercises.update({
+      data: {
+        success: true,
+      },
+      where: {
+        id: id,
+      },
+    });
+
     return { success: true };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: "Ocurrio un error" };
   }
 };
 
 export const getExercise = async (exerciseId: number) => {
   try {
-
     const exercise = await prisma.routineExercises.findFirst({
       where: {
-        id:exerciseId
-      }
+        id: exerciseId,
+      },
     });
 
     return { success: exercise };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: "Ocurrió un error" };
   }
 };

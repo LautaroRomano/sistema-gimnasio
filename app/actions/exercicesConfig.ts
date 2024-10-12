@@ -57,9 +57,9 @@ export const getExercises = async (search: string | null) => {
             },
           }
         : {},
-        orderBy: {
-          updatedAt: 'desc',
-        },
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
 
     return { success: data };
@@ -87,7 +87,6 @@ export const uploadImg = async ({ id, imageUrl, name }: ImageType) => {
 
     return { success: true };
   } catch (error) {
-    console.log("🚀 ~ uploadImg ~ error:", error)
     return { error: "Ocurrio un error" };
   }
 };
@@ -103,9 +102,9 @@ export const getImages = async (search: string | null) => {
             },
           }
         : {},
-        orderBy: {
-          updatedAt: 'desc',
-        },
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
 
     return { success: images };

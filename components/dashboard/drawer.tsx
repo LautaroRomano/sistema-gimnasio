@@ -2,12 +2,12 @@
 import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
 import NextLink from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
 import { Logo } from "@/components/icons";
 import { RootState, deleteUser } from "@/lib/redux";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
 
 export const Drawer = () => {
   const router = useRouter();

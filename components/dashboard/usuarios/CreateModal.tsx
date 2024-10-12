@@ -10,10 +10,10 @@ import {
   Input,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
+import { toast } from "react-toastify";
 
 import { UserType } from "@/types";
 import { createUser } from "@/app/actions/users";
-import { toast } from "react-toastify";
 
 const initData: UserType = {
   id: 0,
@@ -68,6 +68,7 @@ export default function CreateModal({
         progress: undefined,
         theme: "dark",
       });
+
       return;
     }
     if (res.success) {
@@ -95,8 +96,8 @@ export default function CreateModal({
     <>
       <div className="absolute bottom-5 right-5">
         <Button
-          color="primary"
           className="text-default-100 font-bold"
+          color="primary"
           size="lg"
           startContent={<IoMdAdd />}
           onPress={onOpen}
@@ -183,8 +184,8 @@ export default function CreateModal({
                   Cancelar
                 </Button>
                 <Button
-                  color="primary"
                   className="text-default-100 font-bold"
+                  color="primary"
                   size="sm"
                   onPress={() => {
                     handleSubmit();

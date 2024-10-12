@@ -1,4 +1,5 @@
 import { createSlice, configureStore, PayloadAction } from "@reduxjs/toolkit";
+
 import { UserType } from "@/types";
 
 const initialState: { user: UserType | null; sessionToken: string | null } = {

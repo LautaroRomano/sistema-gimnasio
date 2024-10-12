@@ -8,14 +8,13 @@ import {
   Button,
   useDisclosure,
   Input,
-  Spinner,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
+import { toast } from "react-toastify";
 
 import { uploadImg } from "@/app/actions/exercicesConfig";
 import { uploadFile } from "@/lib/firebase";
 import { ImageType } from "@/types";
-import { toast } from "react-toastify";
 
 const initData: ImageType = { id: 0, name: "", imageUrl: "" };
 
@@ -50,11 +49,11 @@ export default function CreateModal({
       if (!files || !files[0]) return setError("imageUrl");
       setLoading(true);
       const url = await uploadFile(files[0]);
+
       if (typeof url !== "string" && url.error) return toast.error(url.error);
 
       setData((p) => ({ ...p, [name]: url }));
     } catch (error) {
-      console.log("🚀 ~ handleChangeImg ~ error:", error);
     } finally {
       setLoading(false);
     }
@@ -78,6 +77,7 @@ export default function CreateModal({
         progress: undefined,
         theme: "dark",
       });
+
       return;
     }
     setLoading(false);
@@ -105,8 +105,8 @@ export default function CreateModal({
     <>
       <div className="absolute bottom-5 right-5">
         <Button
-          color="primary"
           className="text-default-100 font-bold"
+          color="primary"
           size="lg"
           startContent={<IoMdAdd />}
           onPress={onOpen}
@@ -155,15 +155,15 @@ export default function CreateModal({
                   Cancelar
                 </Button>
                 <Button
-                  color="primary"
                   className="text-default-100 font-bold"
-                  size="sm"
+                  color="primary"
                   disabled={loading}
+                  isLoading={loading}
+                  size="sm"
                   onPress={() => {
                     if (loading) return;
                     handleSubmit();
                   }}
-                  isLoading={loading}
                 >
                   Guardar
                 </Button>

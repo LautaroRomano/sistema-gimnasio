@@ -10,6 +10,7 @@ const prisma = new PrismaClient();
 export const verifyToken = async (token: string) => {
   try {
     const verify = jwt.verify(token, process.env.JWT_SECRET || "");
+
     if (typeof verify !== "string" && (verify as JwtPayload).user) {
       const myUser = await prisma.users.findFirst({
         where: { id: (verify as JwtPayload).user.id },
@@ -21,15 +22,17 @@ export const verifyToken = async (token: string) => {
           name: true,
           password: true,
           phone: true,
-          gender:true,
-          height:true,
-          weight:true,
-          wasEdited:true,
+          gender: true,
+          height: true,
+          weight: true,
+          wasEdited: true,
         },
       });
+
       if (myUser) return { success: myUser };
       else return { error: "Usuario no encontrado" };
     }
+
     return { error: "Ocurrió un error" };
   } catch (error) {
     return { error: "Ocurrió un error" };
@@ -63,17 +66,21 @@ export const loginUser = async ({
 
     if (userDni.password === "UPDATE") {
       const newPassword = await bcrypt.hash(password, 10);
+
       prisma.users.update({
         data: { password: newPassword },
         where: { id: userDni.id },
       });
       var token = jwt.sign({ user: userDni }, process.env.JWT_SECRET || "");
+
       return { success: userDni, token };
     }
 
     const isAuth = await bcrypt.compare(password, userDni.password);
+
     if (isAuth) {
       var token = jwt.sign({ user: userDni }, process.env.JWT_SECRET || "");
+
       return { success: userDni, token };
     }
 
@@ -93,11 +100,11 @@ export const createUser = async ({
   gender,
   height,
   weight,
-  isAdmin,
-  wasEdited
+  wasEdited,
 }: UserType) => {
   try {
     let hashedPassword = null;
+
     if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
     }
@@ -130,16 +137,17 @@ export const createUser = async ({
       });
     } else {
       const updatePassword = hashedPassword ? { password: hashedPassword } : {};
+
       await prisma.users.update({
         data: {
           name,
           email,
           phone,
           gender,
-          height:height?height*1:null,
-          weight:weight?weight*1:null,
+          height: height ? height * 1 : null,
+          weight: weight ? weight * 1 : null,
           //isAdmin,
-          wasEdited:!!wasEdited,
+          wasEdited: !!wasEdited,
           ...updatePassword,
         },
         where: { id },
@@ -148,7 +156,6 @@ export const createUser = async ({
 
     return { success: true };
   } catch (error) {
-    console.log("🚀 ~ error:", error)
     return { error: "Ocurrio un error" };
   }
 };
@@ -230,8 +237,8 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
         date.getUTCDate(),
         0,
         0,
-        0
-      )
+        0,
+      ),
     );
 
     const mindOfDay = new Date(
@@ -241,8 +248,8 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
         date.getUTCDate(),
         12,
         0,
-        0
-      )
+        0,
+      ),
     );
 
     const endOfDay = new Date(
@@ -253,8 +260,8 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
         23,
         59,
         59,
-        999
-      )
+        999,
+      ),
     );
 
     // Buscar la rutina en el rango de la fecha (en UTC)
@@ -277,7 +284,7 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
         data: {
           name: `Rutina ${date.toLocaleDateString()}`,
           userId: user_id,
-          date: mindOfDay, // Establece la fecha 
+          date: mindOfDay, // Establece la fecha
         },
       });
     }

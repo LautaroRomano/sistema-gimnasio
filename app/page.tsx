@@ -1,18 +1,20 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { verifyToken } from "./actions/users";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser, deleteUser, setSessionToken, RootState } from "@/lib/redux";
-import CompleteProfile from "@/components/CompleteProfile";
 import { Button } from "@nextui-org/button";
 import { MdAccountCircle } from "react-icons/md";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { Spinner, Image } from "@nextui-org/react";
-import { RoutineType } from "@/types";
+import { Spinner } from "@nextui-org/react";
 import { toast } from "react-toastify";
-import { getRoutines } from "./actions/routines";
 import { IoMdExit } from "react-icons/io";
+
+import { getRoutines } from "./actions/routines";
+import { verifyToken } from "./actions/users";
+
+import { RoutineType } from "@/types";
+import CompleteProfile from "@/components/CompleteProfile";
+import { setUser, deleteUser, setSessionToken, RootState } from "@/lib/redux";
 
 const initRoutines: RoutineType | null = null;
 
@@ -29,12 +31,14 @@ export default function Home() {
 
   const handleChangeNextDay = () => {
     const nextDay = new Date(date);
+
     nextDay.setDate(date.getDate() + 1);
     setDate(nextDay);
   };
 
   const handleChangePreviousDay = () => {
     const previousDay = new Date(date);
+
     previousDay.setDate(date.getDate() - 1);
     setDate(previousDay);
   };
@@ -43,6 +47,7 @@ export default function Home() {
     if (!user || !date) return;
     setLoading(true);
     const res = await getRoutines(user.id, date);
+
     setLoading(false);
     if (res.error) return toast.error(res.error);
     if (res.success) {
@@ -72,6 +77,7 @@ export default function Home() {
 
   useEffect(() => {
     const token = localStorage.getItem("sessionToken");
+
     if (token) {
       dispatch(setSessionToken(token));
       verToken(token);
@@ -83,8 +89,8 @@ export default function Home() {
   if (user && !user.wasEdited) {
     return (
       <CompleteProfile
-        user={user}
         refresh={() => verToken(sessionToken || "")}
+        user={user}
       />
     );
   }
@@ -93,24 +99,22 @@ export default function Home() {
     <section className="flex flex-col items-center justify-center gap-4 h-screen overflow-y-auto">
       <div className="flex w-full items-center justify-between gap-2 px-4 mt-8">
         <div className="flex flex-col items-start">
-          <h1 className={"text-2xl font-bold text-primary"}>
-            Hola, Lautaro
-          </h1>
+          <h1 className={"text-2xl font-bold text-primary"}>Hola, Lautaro</h1>
           <span>Es hora de desafiar tus límites.</span>
         </div>
         <div className="flex gap-2">
           <Button
-            size="sm"
             isIconOnly
             as={"a"}
-            href="/profile"
             className="bg-transparent text-primary"
+            href="/profile"
+            size="sm"
           >
             <MdAccountCircle size={24} />
           </Button>
           <Button
-            size="sm"
             className="bg-transparent text-primary"
+            size="sm"
             onPress={() => {
               dispatch(deleteUser());
               router.push("/login");
@@ -124,9 +128,9 @@ export default function Home() {
       <div className="flex w-full items-center justify-between gap-2 px-4 mt-8">
         <div className="flex items-start">
           <Button
-            startContent={<IoIosArrowBack />}
             className="bg-transparent text-default-900 font-bold"
             color="primary"
+            startContent={<IoIosArrowBack />}
             onPress={handleChangePreviousDay}
           >
             Anterior
@@ -137,16 +141,16 @@ export default function Home() {
         </div>
         <div className="flex items-start">
           <Button
-            endContent={<IoIosArrowForward />}
             className="bg-transparent text-default-900 font-bold"
             color="primary"
+            endContent={<IoIosArrowForward />}
             onPress={handleChangeNextDay}
           >
             Siguiente
           </Button>
         </div>
       </div>
-      <div className="flex w-full h-px bg-primary"></div>
+      <div className="flex w-full h-px bg-primary" />
 
       {loading ? (
         <div className="flex w-full h-full items-center justify-center">
@@ -171,7 +175,7 @@ export default function Home() {
                       </span>
                     </div>
                     <div className="flex  h-[135px] items-center justify-end">
-                    <img
+                      <img
                         alt={ex.name || ""}
                         className="z-10 object-contain rounded-none w-60 min-h-full"
                         src={ex.img || ""}
@@ -203,7 +207,7 @@ export default function Home() {
                       </span>
                     </div>
                     <div className="flex  h-[135px] items-center justify-end">
-                    <img
+                      <img
                         alt={ex.name || ""}
                         className="z-10 object-contain rounded-none w-60 min-h-full"
                         src={ex.img || ""}

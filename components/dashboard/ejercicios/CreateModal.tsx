@@ -11,10 +11,10 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
+import { toast } from "react-toastify";
 
 import { ExerciseType } from "@/types";
 import { create, getImages } from "@/app/actions/exercicesConfig";
-import { toast } from "react-toastify";
 
 const initData: ExerciseType = {
   id: 0,
@@ -67,6 +67,7 @@ export default function CreateModal({
         progress: undefined,
         theme: "dark",
       });
+
       return;
     }
     if (res.success) {
@@ -93,8 +94,8 @@ export default function CreateModal({
     <>
       <div className="absolute bottom-5 right-5">
         <Button
-          color="primary"
           className="text-default-100 font-bold"
+          color="primary"
           size="lg"
           startContent={<IoMdAdd />}
           onPress={onOpen}
@@ -178,8 +179,8 @@ export default function CreateModal({
                   Cancelar
                 </Button>
                 <Button
-                  color="primary"
                   className="text-default-100 font-bold"
+                  color="primary"
                   size="sm"
                   onPress={() => {
                     handleSubmit();

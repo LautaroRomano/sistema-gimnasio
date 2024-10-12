@@ -7,14 +7,15 @@ import {
   CardHeader,
   Input,
   Link,
-  Spinner,
 } from "@nextui-org/react";
 import { useState } from "react";
 import { FaCheckCircle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { loginUser } from "../actions/users";
 import { useDispatch } from "react-redux";
+
+import { loginUser } from "../actions/users";
+
 import { setUser, setSessionToken } from "@/lib/redux";
 
 export default function LoginPage() {
@@ -37,6 +38,7 @@ export default function LoginPage() {
     setLoadingSession(true);
     try {
       const user = await loginUser({ dni, password });
+
       if (user.error) {
         return toast.error(user.error);
       }
@@ -59,7 +61,7 @@ export default function LoginPage() {
       <h1 className="text-xl flex font-bold">Bienvenido</h1>
       <p className="text-md flex">¡Tu mejor versión comienza hoy!</p>
       <Card className="mb-4 w-full my-5 flex rounded-none bg-primary">
-        <CardHeader className="justify-center"></CardHeader>
+        <CardHeader className="justify-center" />
 
         <CardBody className="px-3 pt-0 text-small text-default-400 items-center gap-4">
           <Input
@@ -68,29 +70,29 @@ export default function LoginPage() {
             onChange={(e) => setDni(e.target.value)}
           />
           <Input
-            type={isVisible ? "text" : "password"}
-            placeholder="Contrasena"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             endContent={
               <Button
-                color={isVisible ? "secondary" : "default"}
                 isIconOnly
+                className="m-2"
+                color={isVisible ? "secondary" : "default"}
+                size="sm"
                 variant="bordered"
                 onPress={() => setIsVisible((prev) => !prev)}
-                className="m-2"
-                size="sm"
               >
                 <>
                   {isVisible ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
                 </>
               </Button>
             }
+            placeholder="Contrasena"
+            type={isVisible ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           {error && <h5 className="text-red-600">Ocurrio un error: {error}</h5>}
         </CardBody>
-        <CardFooter></CardFooter>
+        <CardFooter />
       </Card>
       <div className="w-full justify-center">
         {success ? (
@@ -107,10 +109,12 @@ export default function LoginPage() {
           <Button
             className="w-full max-w-xs mb-5 mt-2 text-default-900 font-bold"
             color="primary"
-            disabled={dni.length === 0 || password.length === 0 || loadingSession}
+            disabled={
+              dni.length === 0 || password.length === 0 || loadingSession
+            }
+            isLoading={loadingSession}
             size="md"
             onPress={handleSubmit}
-            isLoading={loadingSession}
           >
             Iniciar sesion
           </Button>

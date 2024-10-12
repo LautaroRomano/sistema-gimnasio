@@ -12,10 +12,11 @@ import {
   Divider,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
+import { toast } from "react-toastify";
+
 import { ExerciseType } from "@/types";
 import { getExercises, getImages } from "@/app/actions/exercicesConfig";
 import { create } from "@/app/actions/routines";
-import { toast } from "react-toastify";
 
 const initData: ExerciseType = {
   id: 0,
@@ -70,6 +71,7 @@ export default function CreateExerciseRoutine({
         progress: undefined,
         theme: "dark",
       });
+
       return;
     }
     if (res.success) {
@@ -95,8 +97,8 @@ export default function CreateExerciseRoutine({
   return (
     <>
       <Button
-        color="primary"
         className="text-default-100 font-bold"
+        color="primary"
         size="sm"
         startContent={<IoMdAdd />}
         onPress={onOpen}
@@ -108,7 +110,7 @@ export default function CreateExerciseRoutine({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-              {data?.id ? "Editar ejercicio" : "Crear ejercicio"}
+                {data?.id ? "Editar ejercicio" : "Crear ejercicio"}
               </ModalHeader>
               <ModalBody>
                 <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
@@ -185,8 +187,8 @@ export default function CreateExerciseRoutine({
                   Cancelar
                 </Button>
                 <Button
-                  color="primary"
                   className="text-default-100 font-bold"
+                  color="primary"
                   size="sm"
                   onPress={() => {
                     handleSubmit();
@@ -231,7 +233,13 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
   return (
     <>
       <div className="flex gap-2 justify-center w-full py-2 px-4 items-center">
-        <Button color="primary" className="text-default-900 font-bold" size="sm" variant="bordered" onPress={onOpen}>
+        <Button
+          className="text-default-900 font-bold"
+          color="primary"
+          size="sm"
+          variant="bordered"
+          onPress={onOpen}
+        >
           Seleccionar desde una plantilla
         </Button>
       </div>
@@ -262,7 +270,7 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
                           key={exerc.id}
                           className="flex p-2 justify-between max-h-24 hover:bg-gray-800 cursor-pointer gap-4"
                           onClick={() => {
-                            updateData({...exerc,id:0});
+                            updateData({ ...exerc, id: 0 });
                             onClose();
                           }}
                         >

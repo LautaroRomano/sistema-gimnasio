@@ -1,8 +1,10 @@
 "use client";
-import { verifyToken } from "../actions/users";
 import { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/react";
 import { useDispatch } from "react-redux";
+
+import { verifyToken } from "../actions/users";
+
 import { setUser, deleteUser, setSessionToken } from "@/lib/redux";
 
 export default function PricingLayout({
@@ -16,8 +18,10 @@ export default function PricingLayout({
 
   const verToken = async (token: string) => {
     const res = await verifyToken(token);
+
     if (!res.success) {
       dispatch(deleteUser());
+
       return (window.location.href = "/login");
     } else {
       dispatch(setUser({ user: res.success }));
@@ -30,6 +34,7 @@ export default function PricingLayout({
 
   useEffect(() => {
     const token = localStorage.getItem("sessionToken");
+
     if (token) {
       dispatch(setSessionToken(token));
       verToken(token); // Verifica el token

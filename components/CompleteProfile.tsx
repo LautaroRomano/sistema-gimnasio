@@ -1,6 +1,4 @@
 "use client";
-import { createUser } from "@/app/actions/users";
-import { UserType } from "@/types";
 import {
   Modal,
   ModalContent,
@@ -12,6 +10,9 @@ import {
 } from "@nextui-org/react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+
+import { UserType } from "@/types";
+import { createUser } from "@/app/actions/users";
 
 const initEditUser: UserType = {
   id: 0,
@@ -62,6 +63,7 @@ export default function CompleteProfile({
         progress: undefined,
         theme: "dark",
       });
+
       return;
     }
     if (res.success) {
@@ -81,6 +83,7 @@ export default function CompleteProfile({
   useEffect(() => {
     if (user) {
       const newEditUser = { ...user };
+
       delete newEditUser.password;
       newEditUser.wasEdited = true;
       newEditUser.gender = "M";
@@ -92,7 +95,7 @@ export default function CompleteProfile({
     <>
       <Modal isOpen={true}>
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalHeader className="flex flex-col gap-1">
                 Debe completar su perfil
@@ -131,14 +134,14 @@ export default function CompleteProfile({
                     onChange={handleChange}
                   />
                   <div className="flex flex-col text-sm">
-                    <label htmlFor="gender" className="text-sm">
+                    <label className="text-sm" htmlFor="gender">
                       Genero
                     </label>
                     <select
+                      className="flex py-4 px-2 bg-[#18181B]"
                       id="gender"
                       name="gender"
                       value={editUser?.gender + ""}
-                      className="flex py-4 px-2 bg-[#18181B]"
                       onChange={handleChange}
                     >
                       <option value="">Seleccionar</option>
@@ -153,6 +156,7 @@ export default function CompleteProfile({
                   )}
                   <div className="flex gap-2">
                     <Input
+                      endContent={<p>cm</p>}
                       errorMessage="Debe completar este campo"
                       isInvalid={error === "height"}
                       label="Altura"
@@ -161,9 +165,9 @@ export default function CompleteProfile({
                       value={editUser?.height + ""}
                       variant="bordered"
                       onChange={handleChange}
-                      endContent={<p>cm</p>}
                     />
                     <Input
+                      endContent={<p>kg</p>}
                       errorMessage="Debe completar este campo"
                       isInvalid={error === "weight"}
                       label="Peso"
@@ -172,7 +176,6 @@ export default function CompleteProfile({
                       value={editUser?.weight + ""}
                       variant="bordered"
                       onChange={handleChange}
-                      endContent={<p>kg</p>}
                     />
                   </div>
                   <Input
@@ -191,9 +194,9 @@ export default function CompleteProfile({
                 <Button
                   className="text-default-100 font-bold"
                   color="primary"
-                  onPress={handleSubmit}
                   isDisabled={loading}
                   isLoading={loading}
+                  onPress={handleSubmit}
                 >
                   Guardar
                 </Button>

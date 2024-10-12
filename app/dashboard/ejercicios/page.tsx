@@ -11,12 +11,12 @@ import {
 import { CiEdit } from "react-icons/ci";
 import { IoMdClose, IoMdTimer } from "react-icons/io";
 import { IoReloadOutline } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 import { Drawer } from "@/components/dashboard/drawer";
 import CreateModal from "@/components/dashboard/ejercicios/CreateModal";
 import { ExerciseType } from "@/types";
 import { getExercises } from "@/app/actions/exercicesConfig";
-import { toast } from "react-toastify";
 
 const initData: ExerciseType[] = [];
 const initEdit: ExerciseType | null = null;
@@ -44,6 +44,7 @@ export default function DashboardPage() {
         progress: undefined,
         theme: "dark",
       });
+
       return;
     }
     if (!res.success) {
@@ -57,6 +58,7 @@ export default function DashboardPage() {
         progress: undefined,
         theme: "dark",
       });
+
       return;
     }
     setData(res.success);
@@ -69,7 +71,7 @@ export default function DashboardPage() {
   return (
     <div className="flex gap-1 bg-backgroundBack w-screen h-screen relative">
       <Drawer />
-      <CreateModal refresh={getData} edit={edit} setEdit={setEdit} />
+      <CreateModal edit={edit} refresh={getData} setEdit={setEdit} />
       <div className="flex flex-col gap-1 w-screen h-full">
         <div className="flex justify-between px-5 items-center gap-8 bg-backgroundComponents rounded-md relative">
           <h1 className="flex text-lg py-4">Plantillas de Ejercicios</h1>
@@ -91,8 +93,8 @@ export default function DashboardPage() {
                   </Button>
                 )}
                 <Button
-                  color="primary"
                   className="text-default-100 font-bold"
+                  color="primary"
                   size="sm"
                   onPress={() => getData(search)}
                 >
