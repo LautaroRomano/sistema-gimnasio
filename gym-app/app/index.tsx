@@ -8,7 +8,7 @@ export default function Index() {
     <SafeAreaView style={{ flex: 1, marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0 }}>
       <ExpoStatusBar style="light" backgroundColor="#181818"/>
       <WebView 
-        source={{ uri: "http://192.168.0.46:3000" }} 
+        source={{ uri: "http://chinoalmiron.redapuntes.com" }} 
         style={{ flex: 1 }} 
       />
     </SafeAreaView>
