@@ -87,7 +87,7 @@ export default function Home() {
   return (
     <section className="flex flex-col items-center justify-center gap-4 h-screen overflow-y-auto">
       <div className="flex w-full items-center justify-between gap-2 px-0 mt-8">
-        <div className="flex flex-col items-start mt-16">
+        <div className="flex flex-col items-start mt-0">
           <Button
             className="bg-transparent text-default-900 font-bold"
             color="primary"

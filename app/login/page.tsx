@@ -107,7 +107,7 @@ export default function LoginPage() {
           </Button>
         ) : (
           <Button
-            className="w-full max-w-xs mb-5 mt-2 text-default-900 font-bold"
+            className="w-full max-w-xs mb-5 mt-2 text-default-100 font-bold"
             color="primary"
             disabled={
               dni.length === 0 || password.length === 0 || loadingSession

@@ -5,7 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@nextui-org/button";
 import { MdAccountCircle } from "react-icons/md";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { Spinner } from "@nextui-org/react";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Spinner,
+  useDisclosure,
+} from "@nextui-org/react";
 import { toast } from "react-toastify";
 import { IoMdExit } from "react-icons/io";
 
@@ -112,16 +120,12 @@ export default function Home() {
           >
             <MdAccountCircle size={24} />
           </Button>
-          <Button
-            className="bg-transparent text-primary"
-            size="sm"
+          <LogoutModal
             onPress={() => {
               dispatch(deleteUser());
               router.push("/login");
             }}
-          >
-            <IoMdExit size={24} />
-          </Button>
+          />
         </div>
       </div>
 
@@ -224,5 +228,50 @@ export default function Home() {
         </div>
       )}
     </section>
+  );
+}
+
+function LogoutModal({ onPress }: { onPress: Function }) {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  return (
+    <>
+      <Button
+        className="bg-transparent text-primary"
+        size="sm"
+        onPress={onOpen}
+      >
+        <IoMdExit size={24} />
+      </Button>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Cerrar sesion
+              </ModalHeader>
+              <ModalBody>
+                <p>Vas a cerrar la sesion de tu cuenta</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cancelar
+                </Button>
+                <Button
+                  color="primary"
+                  className="text-default-100"
+                  onPress={() => {
+                    onPress();
+                    onClose();
+                  }}
+                >
+                  Continuar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
