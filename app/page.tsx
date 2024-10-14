@@ -258,8 +258,8 @@ function LogoutModal({ onPress }: { onPress: Function }) {
                   Cancelar
                 </Button>
                 <Button
-                  color="primary"
                   className="text-default-100"
+                  color="primary"
                   onPress={() => {
                     onPress();
                     onClose();
