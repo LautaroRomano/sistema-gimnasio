@@ -9,7 +9,7 @@ import { siteConfig } from "@/config/site";
 import { Logo } from "@/components/icons";
 import { RootState, deleteUser } from "@/lib/redux";
 
-export const Drawer = () => {
+export const Drawer = ({ isOpen }: { isOpen: boolean }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -22,7 +22,7 @@ export const Drawer = () => {
 
   return (
     <div
-      className={`flex flex-col left-0 top-0 bg-backgroundComponents w-screen max-w-[200px] h-full`}
+      className={`${isOpen ? "flex" : "hidden"} absolute z-50 shadow-md shadow-white md:relative md:flex flex-col left-0 top-0 bg-backgroundComponents w-screen max-w-[200px] h-full`}
     >
       <div className="flex gap-3 w-full items-center justify-center py-4">
         <NextLink
@@ -30,7 +30,7 @@ export const Drawer = () => {
           href="/dashboard"
         >
           <Logo size={24} />
-          <p className="font-bold text-inherit">ACME</p>
+          <p className="text-sm font-bold text-inherit">PANEL DE CONTROL</p>
         </NextLink>
       </div>
 

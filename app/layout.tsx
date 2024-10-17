@@ -37,15 +37,15 @@ export default function RootLayout({
       <head />
       <body
         className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased overflow-hidden",
           fontSans.variable,
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col h-screen">
-            <main className="container mx-auto max-w-7xl px-6 flex-grow">
-              <section className="flex  flex-col items-center justify-center gap-4">
-                <div className="inline-block w-screen text-center justify-center max-w-xl bg-myBg">
+            <main className="container mx-auto max-w-7xl px-0 md:px-6 flex-grow ">
+              <section className="flex flex-col items-center justify-center gap-4 ">
+                <div className="inline-block w-screen text-center justify-center max-w-xl bg-myBg ">
                   {children}
                 </div>
               </section>

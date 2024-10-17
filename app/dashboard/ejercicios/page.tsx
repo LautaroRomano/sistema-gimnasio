@@ -7,11 +7,13 @@ import {
   Button,
   Spinner,
   Input,
+  useDisclosure,
 } from "@nextui-org/react";
 import { CiEdit } from "react-icons/ci";
 import { IoMdClose, IoMdTimer } from "react-icons/io";
 import { IoReloadOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 import { Drawer } from "@/components/dashboard/drawer";
 import CreateModal from "@/components/dashboard/ejercicios/CreateModal";
@@ -27,6 +29,7 @@ export default function DashboardPage() {
   const [edit, setEdit] = useState(initEdit);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState(searchInit);
+  const { isOpen, onOpenChange } = useDisclosure();
 
   const getData = async (search: string | null) => {
     setLoading(true);
@@ -70,13 +73,56 @@ export default function DashboardPage() {
 
   return (
     <div className="flex gap-1 bg-backgroundBack w-screen h-screen relative">
-      <Drawer />
+      <Drawer isOpen={isOpen} />
       <CreateModal edit={edit} refresh={getData} setEdit={setEdit} />
       <div className="flex flex-col gap-1 w-screen h-full">
         <div className="flex justify-between px-5 items-center gap-8 bg-backgroundComponents rounded-md relative">
           <h1 className="flex text-lg py-4">Plantillas de Ejercicios</h1>
+          <div className="flex md:hidden py-4">
+            <Button
+              isIconOnly
+              className="text-black"
+              color="primary"
+              onPress={onOpenChange}
+            >
+              <GiHamburgerMenu />
+            </Button>
+          </div>
           <Input
-            className="flex max-w-sm"
+            className="hidden md:flex max-w-sm"
+            endContent={
+              <div className="flex gap-2">
+                {search && search.length > 0 && (
+                  <Button
+                    isIconOnly
+                    className="rounded-full"
+                    size="sm"
+                    onPress={() => {
+                      setSearch(null);
+                      getData(null);
+                    }}
+                  >
+                    <IoMdClose />
+                  </Button>
+                )}
+                <Button
+                  className="text-default-100 font-bold"
+                  color="primary"
+                  size="sm"
+                  onPress={() => getData(search)}
+                >
+                  Buscar
+                </Button>
+              </div>
+            }
+            placeholder="Nombre"
+            type="text"
+            value={search || ""}
+            onChange={({ target }) => setSearch(target.value)}
+          />
+        </div>
+        <div className="flex md:hidden">
+          <Input
             endContent={
               <div className="flex gap-2">
                 {search && search.length > 0 && (
@@ -113,7 +159,7 @@ export default function DashboardPage() {
             <Spinner size="lg" />
           </div>
         ) : (
-          <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap">
+          <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap overflow-y-auto">
             {data.length > 0 ? (
               data.map((item) => {
                 return (

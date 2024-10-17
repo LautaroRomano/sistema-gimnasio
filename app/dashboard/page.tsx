@@ -1,10 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Button, DatePicker, Divider, Spinner, Input } from "@nextui-org/react";
+import {
+  Button,
+  DatePicker,
+  Divider,
+  Spinner,
+  Input,
+  useDisclosure,
+} from "@nextui-org/react";
 import { IoMdClose } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-toastify";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 import { ExerciseType, RoutineType, UserType } from "@/types";
 import { getAUserRoutine, getUsers } from "@/app/actions/users";
@@ -26,6 +34,7 @@ export default function DashboardPage() {
   const [userId, setUserId] = useState(initUserId);
   const [loading, setLoading] = useState(false);
   const [searchUser, setSearchUser] = useState(searchUserInit);
+  const { isOpen, onOpenChange } = useDisclosure();
 
   const getUserRoutine = async (date?: Date) => {
     setLoading(true);
@@ -108,13 +117,23 @@ export default function DashboardPage() {
   if (userId)
     return (
       <div className="flex gap-1 bg-backgroundBack w-screen h-screen">
-        <Drawer />
+        <Drawer isOpen={isOpen} />
         <div className="flex flex-col gap-1 w-screen h-full">
-          <div className="flex justify-center items-center gap-8 bg-backgroundComponents rounded-md">
-            <h1 className="text-lg py-4">Listado de Rutinas</h1>
+          <div className="flex justify-between items-center gap-8 px-2 bg-backgroundComponents rounded-md">
+            <h1 className="text-sm lg:text-lg py-4">Listado de Rutinas</h1>
+            <div className="flex">
+              <Button
+                isIconOnly
+                className="text-black"
+                color="primary"
+                onPress={onOpenChange}
+              >
+                <GiHamburgerMenu />
+              </Button>
+            </div>
           </div>
-          <div className="flex justify-center items-center my-4 relative">
-            <div className="absolute left-4">
+          <div className="flex flex-col my-2 gap-2 justify-center items-center md:my-4 relative">
+            <div className="flex md:absolute left-4">
               <Button
                 as={"a"}
                 href="/dashboard"
@@ -142,7 +161,7 @@ export default function DashboardPage() {
               <Spinner />
             </div>
           ) : (
-            <div className="flex flex-col justify-start items-center p-4 gap-4 h-full w-full flex-wrap">
+            <div className="flex flex-col justify-start items-center p-0 lg:p-4 gap-4 h-full w-full flex-wrap">
               {routine && (
                 <CreateExerciseRoutine
                   edit={edit}
@@ -201,12 +220,22 @@ export default function DashboardPage() {
 
   return (
     <div className="flex gap-1 bg-backgroundBack w-screen h-screen">
-      <Drawer />
+      <Drawer isOpen={isOpen} />
       <div className="flex flex-col gap-1 w-screen h-full">
-        <div className="flex relative justify-between px-5 items-center gap-8 bg-backgroundComponents rounded-md">
-          <h1 className="text-lg py-4">Selecciona un usuario</h1>
+        <div className="flex relative justify-between px-2 md:px-5 items-center gap-8 bg-backgroundComponents rounded-md">
+          <h1 className="text-sm md:text-lg py-4">Selecciona un usuario</h1>
+          <div className="flex md:hidden py-4">
+            <Button
+              isIconOnly
+              className="text-black"
+              color="primary"
+              onPress={onOpenChange}
+            >
+              <GiHamburgerMenu />
+            </Button>
+          </div>
           <Input
-            className="flex max-w-sm"
+            className="hidden md:flex max-w-sm"
             endContent={
               <div className="flex gap-2">
                 {searchUser && searchUser.length > 0 && (
@@ -240,7 +269,42 @@ export default function DashboardPage() {
           />
         </div>
 
-        <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap">
+        <div className="flex md:hidden">
+          <Input
+            className="flex w-full "
+            endContent={
+              <div className="flex gap-2">
+                {searchUser && searchUser.length > 0 && (
+                  <Button
+                    isIconOnly
+                    className="rounded-full text-default-100 font-bold"
+                    color="primary"
+                    size="sm"
+                    onPress={() => {
+                      setSearchUser(null);
+                      getUsersList(null);
+                    }}
+                  >
+                    <IoMdClose />
+                  </Button>
+                )}
+                <Button
+                  className="text-default-100 font-bold"
+                  color="primary"
+                  size="sm"
+                  onPress={() => getUsersList(searchUser)}
+                >
+                  Buscar
+                </Button>
+              </div>
+            }
+            placeholder="Nombre del usuario"
+            type="text"
+            value={searchUser || ""}
+            onChange={({ target }) => setSearchUser(target.value)}
+          />
+        </div>
+        <div className="flex justify-evenly items-start p-4 gap-4 h-full w-full flex-wrap">
           {users.map((item, i) => {
             return (
               <Button

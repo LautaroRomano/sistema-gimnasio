@@ -105,12 +105,12 @@ export default function Home() {
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 h-screen overflow-y-auto">
-      <div className="flex w-full items-center justify-between gap-2 px-4 mt-8">
-        <div className="flex flex-col items-start">
+      <div className="flex w-full items-center justify-between gap-2 px-1 sm:px-4 mt-8">
+        <div className="flex flex-col ms-2 sm:ms-0 items-start">
           <h1 className={"text-2xl font-bold text-primary"}>Hola, Lautaro</h1>
           <span>Es hora de desafiar tus límites.</span>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-0 sm:gap-2">
           <Button
             isIconOnly
             as={"a"}
@@ -129,7 +129,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex w-full items-center justify-between gap-2 px-4 mt-8">
+      <div className="flex w-full items-center justify-between gap-2 px-1 sm:px-4 mt-8">
         <div className="flex items-start">
           <Button
             className="bg-transparent text-default-900 font-bold"
