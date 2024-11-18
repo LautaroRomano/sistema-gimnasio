@@ -17,7 +17,7 @@ import { ExerciseType } from "@/types";
 import { create, getImages } from "@/app/actions/exercicesConfig";
 
 const initData: ExerciseType = {
-  id: 0,
+  id: '',
   name: "",
   description: "",
   series: 1,
@@ -208,7 +208,7 @@ type InitData = {
 };
 const initDataImages: InitData[] = [];
 const initDataSelected: InitData = {
-  id: 0,
+  id: '',
   name: "",
   imageUrl: null,
   lastUse: null,

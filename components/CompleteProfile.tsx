@@ -15,7 +15,7 @@ import { UserType } from "@/types";
 import { createUser } from "@/app/actions/users";
 
 const initEditUser: UserType = {
-  id: 0,
+  id: '',
   dni: "",
   email: "",
   isAdmin: false,

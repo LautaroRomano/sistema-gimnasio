@@ -1,74 +1,70 @@
 "use server";
-import { PrismaClient } from "@prisma/client";
-
 import { ExerciseType } from "@/types";
+import { db } from "@/lib/firebase"; // Importa Firestore desde tu configuración
+import { collection, addDoc, updateDoc, doc, getDoc } from "firebase/firestore";
 
-const prisma = new PrismaClient();
-
+// Función para crear o actualizar un ejercicio
 export const create = async (
   { id, name, img, description, type, value, series }: ExerciseType,
-  routineId: number,
+  routineId: string, // Firestore usa strings en lugar de números para los IDs
 ) => {
   try {
-    if (id === 0) {
-      await prisma.routineExercises.create({
-        data: {
-          name,
-          img,
-          description,
-          type,
-          value,
-          series: series * 1,
-          routineId,
-        },
+    if (id === '') {
+      // Crear un nuevo ejercicio
+      await addDoc(collection(db, "routineExercises"), {
+        name,
+        img,
+        description,
+        type,
+        value,
+        series: series * 1,
+        routineId,
       });
     } else {
-      await prisma.routineExercises.update({
-        data: {
-          name,
-          img,
-          description,
-          type,
-          value,
-          series: series * 1,
-          routineId,
-        },
-        where: { id },
+      // Actualizar ejercicio existente
+      const exerciseRef = doc(db, "routineExercises", id);
+      await updateDoc(exerciseRef, {
+        name,
+        img,
+        description,
+        type,
+        value,
+        series: series * 1,
+        routineId,
       });
     }
 
     return { success: true };
   } catch (error) {
-    return { error: "Ocurrio un error" };
+    return { error: "Ocurrió un error" };
   }
 };
 
-export const finish = async (id: number) => {
+// Función para marcar un ejercicio como completado
+export const finish = async (id: string) => {
   try {
-    await prisma.routineExercises.update({
-      data: {
-        success: true,
-      },
-      where: {
-        id: id,
-      },
+    const exerciseRef = doc(db, "routineExercises", id);
+    await updateDoc(exerciseRef, {
+      success: true,
     });
 
     return { success: true };
   } catch (error) {
-    return { error: "Ocurrio un error" };
+    return { error: "Ocurrió un error" };
   }
 };
 
-export const getExercise = async (exerciseId: number) => {
+// Función para obtener un ejercicio por ID
+export const getExercise = async (exerciseId: string) => {
   try {
-    const exercise = await prisma.routineExercises.findFirst({
-      where: {
-        id: exerciseId,
-      },
-    });
+    const exerciseRef = doc(db, "routineExercises", exerciseId);
+    const exerciseSnap = await getDoc(exerciseRef);
 
-    return { success: exercise };
+    if (exerciseSnap.exists()) {
+      return { success: exerciseSnap.data() as ExerciseType };
+    } else {
+      return { error: "Ejercicio no encontrado" };
+    }
   } catch (error) {
     return { error: "Ocurrió un error" };
   }

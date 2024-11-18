@@ -14,12 +14,12 @@ import {
 import { IoMdAdd } from "react-icons/io";
 import { toast } from "react-toastify";
 
-import { ExerciseType } from "@/types";
+import { ExerciseType, RoutineType } from "@/types";
 import { getExercises, getImages } from "@/app/actions/exercicesConfig";
 import { create } from "@/app/actions/routines";
 
 const initData: ExerciseType = {
-  id: 0,
+  id: '',
   name: "",
   description: "",
   series: 1,
@@ -34,12 +34,12 @@ const errorDataInit: ErrorData = "";
 
 export default function CreateExerciseRoutine({
   refresh,
-  routineId,
+  routine,
   edit,
   setEdit,
 }: {
   refresh: Function;
-  routineId: number;
+  routine: RoutineType;
   edit: ExerciseType | null;
   setEdit: Function;
 }) {
@@ -55,10 +55,14 @@ export default function CreateExerciseRoutine({
     setData((p) => ({ ...p, [name]: value }));
   };
 
+  console.log({routine,
+    edit,
+    setEdit,})
+
   const handleSubmit = async () => {
     if (!data.name || data.name.length === 0) return setError("name");
     if (!data.img || data.img.length === 0) return setError("img");
-    const res = await create(data, routineId);
+    const res = await create(data, routine);
 
     if (res.error) {
       toast.error(res.error, {
@@ -270,7 +274,7 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
                           key={exerc.id}
                           className="flex p-2 justify-between max-h-24 hover:bg-gray-800 cursor-pointer gap-4"
                           onClick={() => {
-                            updateData({ ...exerc, id: 0 });
+                            updateData({ ...exerc, id: '' });
                             onClose();
                           }}
                         >
@@ -309,17 +313,17 @@ function SelectPlantillaModal({ updateData }: { updateData: Function }) {
 }
 
 type InitData = {
-  id: number;
+  id: string;
   name: string;
   imageUrl: string | null;
   lastUse: Date | null;
-  createdAt: Date;
-  updatedAt: Date | null;
-  deletedAt: Date | null;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+  deletedAt?: Date | null;
 };
 const initDataImages: InitData[] = [];
 const initDataSelected: InitData = {
-  id: 0,
+  id: '',
   name: "",
   imageUrl: null,
   lastUse: null,

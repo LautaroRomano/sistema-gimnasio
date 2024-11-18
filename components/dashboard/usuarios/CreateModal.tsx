@@ -16,7 +16,7 @@ import { UserType } from "@/types";
 import { createUser } from "@/app/actions/users";
 
 const initData: UserType = {
-  id: 0,
+  id: '',
   dni: "",
   name: "",
   email: "",
@@ -80,6 +80,7 @@ export default function CreateModal({
 
   useEffect(() => {
     if (editUser?.id) {
+      delete editUser.password
       setData(editUser);
       onOpen();
     }

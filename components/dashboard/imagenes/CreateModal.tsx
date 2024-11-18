@@ -16,7 +16,7 @@ import { uploadImg } from "@/app/actions/exercicesConfig";
 import { uploadFile } from "@/lib/firebase";
 import { ImageType } from "@/types";
 
-const initData: ImageType = { id: 0, name: "", imageUrl: "" };
+const initData: ImageType = { id: '', name: "", imageUrl: "" };
 
 type ErrorData = string;
 const errorDataInit: ErrorData = "";

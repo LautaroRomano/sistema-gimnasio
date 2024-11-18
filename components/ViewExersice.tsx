@@ -1,86 +1,51 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@nextui-org/button";
-import { Spinner, Image, Divider } from "@nextui-org/react";
+import { Image, Divider } from "@nextui-org/react";
 import { toast } from "react-toastify";
-import { useParams } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoReloadCircle, IoTimeSharp } from "react-icons/io5";
 
-import { finish, getExercise } from "../../actions/exercises";
-import { verifyToken } from "../../actions/users";
-
-import { ExerciseType } from "@/types";
-import { setUser, deleteUser, setSessionToken, RootState } from "@/lib/redux";
+import { ExerciseType, RoutineType } from "@/types";
+import { updateExersice } from "@/app/actions/routines";
 
 const initExercise: ExerciseType | null = null;
 
-export default function Home() {
+export default function ViewExersice({
+  routine,
+  exerciseId,
+  close,
+}: {
+  routine: RoutineType | null;
+  exerciseId: string;
+  close: Function;
+}) {
   const [exercise, setExercise] = useState(initExercise);
-  const [loading, setLoading] = useState(false);
-  const { exerciseId } = useParams();
 
   const router = useRouter();
-  const dispatch = useDispatch();
-
-  const user = useSelector((state: RootState) => state.user);
 
   const findExercise = async () => {
-    if (!user) return;
-    if (Array.isArray(exerciseId) || typeof exerciseId !== "string") return;
-    setLoading(true);
-    const res = await getExercise(exerciseId);
-
-    setLoading(false);
-    if (res.error) return toast.error(res.error);
-    if (res.success) {
-      setExercise(res.success);
-    }
+    if (!routine) return;
+    const exercise =
+      routine.exercises.find((ex) => ex.id === exerciseId) || null;
+    setExercise(exercise);
   };
 
   useEffect(() => {
-    if (user && !exercise) {
-      findExercise();
-    }
-  }, [user]);
-
-  const verToken = async (token: string) => {
-    const res = await verifyToken(token);
-
-    if (!res.success) {
-      dispatch(deleteUser());
-      router.push("/login");
-    } else {
-      dispatch(setUser({ user: res.success }));
-    }
-    if (res?.success?.isAdmin) {
-      router.push("/dashboard");
-    }
-  };
-
-  useEffect(() => {
-    const token = localStorage.getItem("sessionToken");
-
-    if (token) {
-      dispatch(setSessionToken(token));
-      verToken(token);
-    } else {
-      router.push("/login");
-    }
-  }, []);
+    if (routine && exerciseId) findExercise();
+  }, [routine, exerciseId]);
 
   const handleFinish = async () => {
-    if (!exercise?.id) return;
-    const res = await finish(exercise.id);
+    if (!exercise?.id || !routine) return;
+    const res = await updateExersice({ ...exercise, success: true }, routine);
 
     if (res.error) return toast.error(res.error);
 
     toast.success("Finalizado con exito!");
 
     setTimeout(() => {
-      router.push("/");
+      close();
     }, 1000);
   };
 
@@ -96,18 +61,14 @@ export default function Home() {
                 <IoIosArrowBack size={19} />
               </strong>
             }
-            onPress={() => router.push("/")}
+            onPress={() => close()}
           >
             <strong>{exercise?.name}</strong>
           </Button>
         </div>
       </div>
 
-      {loading ? (
-        <div className="flex w-full h-full items-center justify-center">
-          <Spinner />
-        </div>
-      ) : exercise ? (
+      {exercise ? (
         <div className="flex flex-col w-full h-full items-center justify-start gap-2 pb-8">
           <div className="flex w-full justify-center items-center py-5 px-2">
             <Image

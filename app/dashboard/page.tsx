@@ -23,7 +23,7 @@ import CreateExerciseRoutine from "@/components/dashboard/CreateExerciseRoutine"
 const initData: UserType[] = [];
 const initRoutineData: RoutineType | null = null;
 const initEdit: ExerciseType | null = null;
-const initUserId: number | null = null;
+const initUserId: string | null = null;
 const searchUserInit: string | null = null;
 
 export default function DashboardPage() {
@@ -98,7 +98,7 @@ export default function DashboardPage() {
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get("user");
 
-    if (id) setUserId(parseInt(id));
+    if (id) setUserId(id);
   };
 
   useEffect(() => {
@@ -166,7 +166,7 @@ export default function DashboardPage() {
                 <CreateExerciseRoutine
                   edit={edit}
                   refresh={() => getUserRoutine()}
-                  routineId={routine?.id}
+                  routine={routine}
                   setEdit={setEdit}
                 />
               )}
@@ -184,7 +184,7 @@ export default function DashboardPage() {
                         success,
                         ...data
                       },
-                      i,
+                      i
                     ) => ({
                       id: i + 1,
                       orden: i + 1,
@@ -207,7 +207,7 @@ export default function DashboardPage() {
                             ...data,
                           }),
                       },
-                    }),
+                    })
                   )}
                   setEdit={setEdit}
                 />

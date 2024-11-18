@@ -30,7 +30,7 @@ import { UserType } from "@/types";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const initEditUser: UserType = {
-  id: 0,
+  id: '',
   dni: "",
   email: "",
   isAdmin: false,
@@ -39,6 +39,7 @@ const initEditUser: UserType = {
   weight: 0,
   wasEdited: true,
   name: "",
+  createdAt:new Date()
 };
 
 export default function Home() {

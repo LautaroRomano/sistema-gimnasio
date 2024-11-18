@@ -20,15 +20,17 @@ import { IoMdExit } from "react-icons/io";
 import { getRoutines } from "./actions/routines";
 import { verifyToken } from "./actions/users";
 
-import { RoutineType } from "@/types";
+import { ExerciseType, RoutineType } from "@/types";
 import CompleteProfile from "@/components/CompleteProfile";
 import { setUser, deleteUser, setSessionToken, RootState } from "@/lib/redux";
+import ViewExersice from "@/components/ViewExersice";
 
 const initRoutines: RoutineType | null = null;
 
 export default function Home() {
   const [date, setDate] = useState(new Date());
   const [routine, setRoutine] = useState(initRoutines);
+  const [viewExersice, setViewExercise] = useState<ExerciseType | null>(null);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -60,6 +62,8 @@ export default function Home() {
     if (res.error) return toast.error(res.error);
     if (res.success) {
       setRoutine(res.success);
+    } else {
+      setRoutine(null);
     }
   };
 
@@ -99,6 +103,19 @@ export default function Home() {
       <CompleteProfile
         refresh={() => verToken(sessionToken || "")}
         user={user}
+      />
+    );
+  }
+
+  if (viewExersice !== null) {
+    return (
+      <ViewExersice
+        exerciseId={viewExersice.id}
+        routine={routine}
+        close={() => {
+          setViewExercise(null);
+          findRoutine();
+        }}
       />
     );
   }
@@ -169,7 +186,7 @@ export default function Home() {
                 <button
                   key={ex.id}
                   className="bg-primary w-full h-[150px] px-8 items-center"
-                  onClick={() => router.push(`/exercise/${ex.id}`)}
+                  onClick={() => setViewExercise(ex)}
                 >
                   <div className="flex w-full h-[135px] rounded-2xl bg-backgroundComponents overflow-hidden justify-between hover:opacity-90">
                     <div className="flex flex-col w-full items-center justify-center">
@@ -201,7 +218,7 @@ export default function Home() {
                 <button
                   key={ex.id}
                   className="bg-primary w-full h-[150px] px-8 items-center"
-                  onClick={() => router.push(`/exercise/${ex.id}`)}
+                  onClick={() => setViewExercise(ex)}
                 >
                   <div className="flex w-full h-[135px] rounded-2xl bg-backgroundComponents overflow-hidden justify-between hover:opacity-90">
                     <div className="flex flex-col w-full items-center justify-center">

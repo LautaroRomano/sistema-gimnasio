@@ -1,53 +1,40 @@
-# Next.js & NextUI Template
+# Realiza la implementación en Firebase Hosting
+Puedes realizar la implementación ahora o más adelante. Para hacerlo ahora mismo, abre una ventana de la terminal y, luego, navega al directorio raíz de tu app web o crea uno.
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
-
-[Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
-
-## Technologies Used
-
-- [Next.js 14](https://nextjs.org/docs/getting-started)
-- [NextUI v2](https://nextui.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [next-themes](https://github.com/pacocoursey/next-themes)
-
-## How to Use
-
-### Use the template with create-next-app
-
-To create a new project based on this template using `create-next-app`, run the following command:
+Acceder a Google
 
 ```bash
-npx create-next-app -e https://github.com/nextui-org/next-app-template
+firebase login
 ```
 
-### Install dependencies
-
-You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
+Inicia el proyecto
+Ejecuta el siguiente comando en el directorio raíz de tu app:
 
 ```bash
-npm install
+firebase init
 ```
 
-### Run the development server
+Especifica tu sitio en firebase.json
+Agrega el ID de tu sitio al archivo de configuración firebase.json. Después de realizar la configuración, consulta las prácticas recomendadas para implementar varios sitios.
 
 ```bash
-npm run dev
+{
+  "hosting": {
+    "site": "chinoalmiron",
+
+    "public": "public",
+    ...
+  }
+}
 ```
 
-### Setup pnpm (optional)
-
-If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
+Cuando tengas todo listo, implementa tu app web
+Ubica los archivos estáticos (p. ej., HTML, CSS y JS) en el directorio de implementación de la app (el directorio predeterminado es “public”). Luego, ejecuta este comando desde el directorio raíz de tu app:
 
 ```bash
-public-hoist-pattern[]=*@nextui-org/*
+firebase deploy --only hosting:chinoalmiron
 ```
 
-After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
+Después de la implementación, consulta tu app en chinoalmiron.web.app.
 
-## License
-
-Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
+¿Necesitas ayuda? Consulta los documentos de Hosting.
