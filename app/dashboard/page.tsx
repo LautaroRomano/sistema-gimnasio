@@ -7,6 +7,7 @@ import {
   Spinner,
   Input,
   useDisclosure,
+  DateValue,
 } from "@nextui-org/react";
 import { IoMdClose } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
@@ -145,21 +146,16 @@ export default function DashboardPage() {
             <DatePicker
               className="max-w-[284px]"
               label="Dia de entrenamiento"
-              onChange={({
-                day,
-                month,
-                year,
-              } : {
-                day: number;
-                month: number;
-                year: number;
-              }) => {
-                const date = new Date();
+              onChange={(value: DateValue | null) => {
+                if (value) {
+                  const { day, month, year } = value;
+                  const date = new Date();
 
-                date.setDate(day);
-                date.setMonth(month - 1);
-                date.setFullYear(year);
-                setSelectedDate(date);
+                  date.setDate(day);
+                  date.setMonth(month - 1);
+                  date.setFullYear(year);
+                  setSelectedDate(date);
+                }
               }}
             />
           </div>
