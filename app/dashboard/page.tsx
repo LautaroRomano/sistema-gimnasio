@@ -145,7 +145,15 @@ export default function DashboardPage() {
             <DatePicker
               className="max-w-[284px]"
               label="Dia de entrenamiento"
-              onChange={({ day, month, year }) => {
+              onChange={({
+                day,
+                month,
+                year,
+              } : {
+                day: number;
+                month: number;
+                year: number;
+              }) => {
                 const date = new Date();
 
                 date.setDate(day);
@@ -184,7 +192,7 @@ export default function DashboardPage() {
                         success,
                         ...data
                       },
-                      i,
+                      i
                     ) => ({
                       id: i + 1,
                       orden: i + 1,
@@ -207,7 +215,7 @@ export default function DashboardPage() {
                             ...data,
                           }),
                       },
-                    }),
+                    })
                   )}
                   setEdit={setEdit}
                 />
