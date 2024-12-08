@@ -159,7 +159,7 @@ export default function ImagesPage() {
             <Spinner size="lg" />
           </div>
         ) : (
-          <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap overflow-y-auto">
+          <div className="flex justify-evenly p-4 gap-4 h-full w-full flex-wrap overflow-y-auto pb-24">
             {data.length > 0 ? (
               data.map((item) => {
                 return (

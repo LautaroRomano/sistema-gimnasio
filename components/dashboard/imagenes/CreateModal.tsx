@@ -103,7 +103,7 @@ export default function CreateModal({
 
   return (
     <>
-      <div className="absolute bottom-5 right-5">
+      <div className="absolute bottom-5 right-5 z-50">
         <Button
           className="text-default-100 font-bold"
           color="primary"

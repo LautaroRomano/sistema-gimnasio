@@ -67,7 +67,7 @@ export const loginUser = async ({
     if (userDni.password === "UPDATE") {
       const newPassword = await bcrypt.hash(password, 10);
 
-      prisma.users.update({
+      await prisma.users.update({
         data: { password: newPassword },
         where: { id: userDni.id },
       });
