@@ -295,7 +295,7 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
         routineId: routine.id,
       },
       orderBy: {
-        updatedAt: "desc",
+        updatedAt: "asc",
       },
     });
 
