@@ -55,7 +55,7 @@ export default function TableRoutines({ data, setEdit }) {
   }, []);
 
   return (
-    <Table aria-label="Example table with custom cells">
+    <Table aria-label="Example table with custom cells" className="flex overflow-x-auto overflow-y-auto">
       <TableHeader
         columns={Object.keys(data[0]).map((val) => ({
           name: val.toUpperCase(),

@@ -95,7 +95,7 @@ export default function CreateExerciseRoutine({
   }, [isOpen]);
 
   return (
-    <>
+    <div className="flex">
       <Button
         className="text-default-100 font-bold"
         color="primary"
@@ -202,7 +202,7 @@ export default function CreateExerciseRoutine({
           )}
         </ModalContent>
       </Modal>
-    </>
+    </div>
   );
 }
 

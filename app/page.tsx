@@ -161,7 +161,7 @@ export default function Home() {
           <Spinner />
         </div>
       ) : routine && routine.exercises.length > 0 ? (
-        <div className="flex flex-col w-full h-full items-center justify-start gap-2 pb-8">
+        <div className="flex flex-col w-full h-full items-center justify-start gap-2 pb-8 overflow-y-auto">
           {routine.exercises
             .filter((ex) => !ex.success)
             .map((ex, i) => {

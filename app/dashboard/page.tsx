@@ -165,7 +165,7 @@ export default function DashboardPage() {
               <Spinner />
             </div>
           ) : (
-            <div className="flex flex-col justify-start items-center p-0 lg:p-4 gap-4 h-full w-full flex-wrap">
+            <div className="flex flex-col justify-start items-center p-0 lg:p-4 gap-4 h-full w-full overflow-y-auto" >
               {routine && (
                 <CreateExerciseRoutine
                   edit={edit}
