@@ -52,7 +52,7 @@ export default function Index() {
         </View>
       ) : (
         <WebView
-          source={{ uri: "https://chinoalmiron.redapuntes.com" }}
+          source={{ uri: "chinoalmiron.vercel.app" }}
           style={{ flex: 1 }}
           onError={() => setHasError(true)} // Maneja el error y cambia el estado
         />
