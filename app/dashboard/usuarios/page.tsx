@@ -153,7 +153,7 @@ export default function DashboardPage() {
             <Spinner size="lg" />
           </div>
         ) : (
-          <div className="flex justify-evenly p-4 pb-24 gap-4 h-full w-full flex-wrap overflow-y-auto">
+          <div className="flex justify-evenly items-start p-4 pb-24 gap-4 h-full w-full flex-wrap overflow-y-auto">
             {data.length > 0 ? (
               data.map((item) => {
                 return (

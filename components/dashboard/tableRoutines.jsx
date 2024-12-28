@@ -10,7 +10,7 @@ import {
   Tooltip,
   Image,
 } from "@nextui-org/react";
-import { CiEdit as EditIcon } from "react-icons/ci";
+import { CiEdit as EditIcon, CiTrash } from "react-icons/ci";
 
 export default function TableRoutines({ data, setEdit }) {
   const renderCell = React.useCallback((exercise, columnKey) => {
@@ -38,13 +38,21 @@ export default function TableRoutines({ data, setEdit }) {
         );
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
+          <div className="relative flex items-center gap-4">
             <Tooltip content="Editar">
               <button 
               className="text-xl text-white cursor-pointer active:opacity-50"
               onClick={cellValue.edit}
               >
                 <EditIcon />
+              </button>
+            </Tooltip>
+            <Tooltip content="Borrar">
+              <button 
+              className="text-xl text-danger cursor-pointer active:opacity-50"
+              onClick={cellValue.delete}
+              >
+                <CiTrash />
               </button>
             </Tooltip>
           </div>

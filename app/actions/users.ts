@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 import { UserType } from "@/types";
+import { error } from "console";
 
 const prisma = new PrismaClient();
 
@@ -230,11 +231,13 @@ export const getUsers = async (search: string | null) => {
 export const getAUserRoutine = async (user_id: number, date: Date) => {
   try {
     // Obtener la fecha en UTC (sin el desfase de la zona horaria local)
+    const newDate = new Date(date);
+    newDate.setHours(newDate.getHours() - 3);
     const startOfDay = new Date(
       Date.UTC(
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
+        newDate.getUTCFullYear(),
+        newDate.getUTCMonth(),
+        newDate.getUTCDate(),
         0,
         0,
         0,
@@ -243,9 +246,9 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
 
     const mindOfDay = new Date(
       Date.UTC(
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
+        newDate.getUTCFullYear(),
+        newDate.getUTCMonth(),
+        newDate.getUTCDate(),
         12,
         0,
         0,
@@ -254,9 +257,9 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
 
     const endOfDay = new Date(
       Date.UTC(
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
+        newDate.getUTCFullYear(),
+        newDate.getUTCMonth(),
+        newDate.getUTCDate(),
         23,
         59,
         59,
@@ -304,3 +307,16 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
     return { error: "Ocurrió un error" };
   }
 };
+
+
+export const deleteExercise = async (id: number) => {
+  try {
+    await prisma.routineExercises.delete({
+      where: { id },
+    });
+
+    return { success: true };
+  } catch (error) {
+    return { error: "Ocurrió un error" };
+  }
+}

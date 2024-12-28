@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 import { ExerciseType, RoutineType, UserType } from "@/types";
-import { getAUserRoutine, getUsers } from "@/app/actions/users";
+import { deleteExercise, getAUserRoutine, getUsers } from "@/app/actions/users";
 import { Drawer } from "@/components/dashboard/drawer";
 import TableRoutines from "@/components/dashboard/tableRoutines";
 import CreateExerciseRoutine from "@/components/dashboard/CreateExerciseRoutine";
@@ -32,6 +32,7 @@ export default function DashboardPage() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [routine, setRoutine] = useState(initRoutineData);
   const [edit, setEdit] = useState(initEdit);
+  const [deleteUser, setDelete] = useState<null | number>(null);
   const [userId, setUserId] = useState(initUserId);
   const [loading, setLoading] = useState(false);
   const [searchUser, setSearchUser] = useState(searchUserInit);
@@ -102,6 +103,28 @@ export default function DashboardPage() {
     if (id) setUserId(parseInt(id));
   };
 
+  const deleteExerciseFunc = async (id: number) => {
+    try {
+      const res = await deleteExercise(id);
+      if (res.error) {
+        toast.error(res.error, {
+          theme: "dark",
+        });
+
+        return;
+      } else {
+        toast.success("Ejercicio borrado!", {
+          theme: "dark",
+        });
+        getUserRoutine();
+      }
+    } catch (error) {
+      toast.error('Ocurrio un error!', {
+        theme: "dark",
+      });
+    }
+  };
+
   useEffect(() => {
     getUserRoutine();
   }, [selectedDate]);
@@ -114,6 +137,18 @@ export default function DashboardPage() {
   useEffect(() => {
     getUserRoutine(new Date());
   }, [userId]);
+
+  useEffect(() => {
+    if (deleteUser !== null) {
+      const res = confirm("¿Estas seguro de eliminar este ejercicio?");
+      if (res) {
+        deleteExerciseFunc(deleteUser);
+        setDelete(null);
+      } else {
+        setDelete(null);
+      }
+    }
+  }, [deleteUser]);
 
   if (userId)
     return (
@@ -165,7 +200,7 @@ export default function DashboardPage() {
               <Spinner />
             </div>
           ) : (
-            <div className="flex flex-col justify-start items-center p-0 lg:p-4 gap-4 h-full w-full overflow-y-auto" >
+            <div className="flex flex-col justify-start items-center p-0 lg:p-4 gap-4 h-full w-full overflow-y-auto">
               {routine && (
                 <CreateExerciseRoutine
                   edit={edit}
@@ -210,6 +245,7 @@ export default function DashboardPage() {
                             success,
                             ...data,
                           }),
+                        delete: () => setDelete(data.id),
                       },
                     })
                   )}
