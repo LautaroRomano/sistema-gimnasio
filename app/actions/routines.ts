@@ -45,11 +45,13 @@ export const create = async (
 
 export const getRoutines = async (id: number, date: Date) => {
   try {
+    const newDate = new Date(date);
+    newDate.setHours(newDate.getHours() - 3);
     const startOfDay = new Date(
       Date.UTC(
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
+        newDate.getUTCFullYear(),
+        newDate.getUTCMonth(),
+        newDate.getUTCDate(),
         0,
         0,
         0,
@@ -57,9 +59,9 @@ export const getRoutines = async (id: number, date: Date) => {
     );
     const endOfDay = new Date(
       Date.UTC(
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
+        newDate.getUTCFullYear(),
+        newDate.getUTCMonth(),
+        newDate.getUTCDate(),
         23,
         59,
         59,

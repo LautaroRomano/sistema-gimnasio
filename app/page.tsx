@@ -60,6 +60,8 @@ export default function Home() {
     if (res.error) return toast.error(res.error);
     if (res.success) {
       setRoutine(res.success);
+    } else {
+      setRoutine(null);
     }
   };
 
@@ -107,7 +109,9 @@ export default function Home() {
     <section className="flex flex-col items-center justify-center gap-4 h-screen overflow-y-auto">
       <div className="flex w-full items-center justify-between gap-2 px-1 sm:px-4 mt-8">
         <div className="flex flex-col ms-2 sm:ms-0 items-start">
-          <h1 className={"text-2xl font-bold text-primary"}>Hola{user ? `, ${user.name}` : '!'}</h1>
+          <h1 className={"text-2xl font-bold text-primary"}>
+            Hola{user ? `, ${user.name?.split(" ")[0]}!` : "!"}
+          </h1>
           <span>Es hora de desafiar tus límites.</span>
         </div>
         <div className="flex gap-0 sm:gap-2">
