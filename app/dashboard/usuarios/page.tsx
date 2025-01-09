@@ -18,7 +18,7 @@ import { IoMdClose } from "react-icons/io";
 import { toast } from "react-toastify";
 import { GiHamburgerMenu } from "react-icons/gi";
 
-import { getUsers } from "@/app/actions/users";
+import { getUsers, deleteUser } from "@/app/actions/users";
 import { UserType } from "@/types";
 import CreateModal from "@/components/dashboard/usuarios/CreateModal";
 import { Drawer } from "@/components/dashboard/drawer";
@@ -59,6 +59,43 @@ export default function DashboardPage() {
   useEffect(() => {
     getData(null);
   }, []);
+
+  const deleteUserHandler = async (id: number) => {
+    const userResponse = confirm("¿Estas seguro de eliminar este usuario?");
+    if (!userResponse) return;
+
+    const res = await deleteUser(id);
+
+    if (res.error) {
+      toast.error(res.error, {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
+      return;
+    }
+
+    if (res.success) {
+      toast.success("Usuario eliminado", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
+      getData(null);
+    }
+  }
 
   return (
     <div className="flex gap-1 bg-backgroundBack w-screen h-screen relative">
@@ -207,6 +244,17 @@ export default function DashboardPage() {
                           onPress={() => setEditUser(item)}
                         >
                           Editar
+                        </Button>
+
+                        <Button
+                          className="flex text-default-100 font-bold"
+                          color="danger"
+                          radius="full"
+                          size="sm"
+                          startContent={<IoMdClose />}
+                          onPress={() => deleteUserHandler(item.id)}
+                        >
+                          Eliminar
                         </Button>
                       </div>
                     </CardFooter>

@@ -51,7 +51,7 @@ export const loginUser = async ({
     if (!dni || !password) return { error: "Debe completar todos los campos!" };
 
     const userDni = await prisma.users.findFirst({
-      where: { dni: dni },
+      where: { AND: [{ dni }, { deletedAt: null }] },
       select: {
         id: true,
         dni: true,
@@ -308,10 +308,24 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
   }
 };
 
-
 export const deleteExercise = async (id: number) => {
   try {
     await prisma.routineExercises.delete({
+      where: { id },
+    });
+
+    return { success: true };
+  } catch (error) {
+    return { error: "Ocurrió un error" };
+  }
+}
+
+export const deleteUser = async (id: number) => {
+  try {
+    await prisma.users.update({
+      data: {
+        deletedAt: new Date(),
+      },
       where: { id },
     });
 
