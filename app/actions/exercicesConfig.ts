@@ -91,8 +91,9 @@ export const uploadImg = async ({ id, imageUrl, name }: ImageType) => {
   }
 };
 
-export const getImages = async (search: string | null) => {
+export const getImages = async (search: string | null, page: number) => {
   try {
+    const perPage = 10;
     const images = await prisma.images.findMany({
       where: search
         ? {
@@ -105,6 +106,8 @@ export const getImages = async (search: string | null) => {
       orderBy: {
         updatedAt: "desc",
       },
+      take: perPage,
+      skip: page * perPage,
     });
 
     return { success: images };

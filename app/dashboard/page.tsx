@@ -106,6 +106,7 @@ export default function DashboardPage() {
   const deleteExerciseFunc = async (id: number) => {
     try {
       const res = await deleteExercise(id);
+
       if (res.error) {
         toast.error(res.error, {
           theme: "dark",
@@ -119,7 +120,7 @@ export default function DashboardPage() {
         getUserRoutine();
       }
     } catch (error) {
-      toast.error('Ocurrio un error!', {
+      toast.error("Ocurrio un error!", {
         theme: "dark",
       });
     }
@@ -141,6 +142,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (deleteUser !== null) {
       const res = confirm("¿Estas seguro de eliminar este ejercicio?");
+
       if (res) {
         deleteExerciseFunc(deleteUser);
         setDelete(null);
@@ -223,7 +225,7 @@ export default function DashboardPage() {
                         success,
                         ...data
                       },
-                      i
+                      i,
                     ) => ({
                       id: i + 1,
                       orden: i + 1,
@@ -247,7 +249,7 @@ export default function DashboardPage() {
                           }),
                         delete: () => setDelete(data.id),
                       },
-                    })
+                    }),
                   )}
                   setEdit={setEdit}
                 />

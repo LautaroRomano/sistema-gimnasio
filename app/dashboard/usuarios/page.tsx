@@ -62,6 +62,7 @@ export default function DashboardPage() {
 
   const deleteUserHandler = async (id: number) => {
     const userResponse = confirm("¿Estas seguro de eliminar este usuario?");
+
     if (!userResponse) return;
 
     const res = await deleteUser(id);
@@ -95,7 +96,7 @@ export default function DashboardPage() {
 
       getData(null);
     }
-  }
+  };
 
   return (
     <div className="flex gap-1 bg-backgroundBack w-screen h-screen relative">

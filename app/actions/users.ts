@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 import { UserType } from "@/types";
-import { error } from "console";
 
 const prisma = new PrismaClient();
 
@@ -232,6 +231,7 @@ export const getAUserRoutine = async (user_id: number, date: Date) => {
   try {
     // Obtener la fecha en UTC (sin el desfase de la zona horaria local)
     const newDate = new Date(date);
+
     newDate.setHours(newDate.getHours() - 3);
     const startOfDay = new Date(
       Date.UTC(
@@ -318,7 +318,7 @@ export const deleteExercise = async (id: number) => {
   } catch (error) {
     return { error: "Ocurrió un error" };
   }
-}
+};
 
 export const deleteUser = async (id: number) => {
   try {
@@ -333,4 +333,4 @@ export const deleteUser = async (id: number) => {
   } catch (error) {
     return { error: "Ocurrió un error" };
   }
-}
+};

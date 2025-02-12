@@ -12,6 +12,7 @@ import { CiEdit } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { IoMdClose } from "react-icons/io";
+import { IoReload as LoadIcon } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 import CreateModal from "@/components/dashboard/imagenes/CreateModal";
@@ -24,15 +25,18 @@ const initEdit: ImageType | null = null;
 const searchInit: string | null = null;
 
 export default function ImagesPage() {
+  const [page, setPage] = useState(0);
   const [data, setData] = useState(initData);
   const [edit, setEdit] = useState(initEdit);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState(searchInit);
+  const [loadingMoreImg, setLoadingMoreImg] = useState(false);
   const { isOpen, onOpenChange } = useDisclosure();
 
   const getData = async (search: string | null) => {
     setLoading(true);
-    const res = await getImages(search);
+    setPage(0);
+    const res = await getImages(search, 0);
 
     setLoading(false);
     if (res.error) {
@@ -69,6 +73,45 @@ export default function ImagesPage() {
   useEffect(() => {
     getData(null);
   }, []);
+
+  const handleLoadImages = async () => {
+    setLoadingMoreImg(true);
+    const res = await getImages(search, page + 1);
+
+    setPage(page + 1);
+
+    setLoadingMoreImg(false);
+    if (res.error) {
+      toast.error(res.error, {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
+      return;
+    }
+
+    if (!res.success) {
+      toast.error("Ocurrió un error inesperado", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
+      return;
+    }
+    setData([...data, ...res.success]);
+  };
 
   return (
     <div className="flex gap-1 bg-backgroundBack w-screen h-screen relative">
@@ -197,6 +240,17 @@ export default function ImagesPage() {
                 <h4>No hay imagenes para mostrar</h4>
               </div>
             )}
+            <div className="flex items-center justify-center w-full">
+              <Button
+                className="text-black font-semibold"
+                color="primary"
+                isLoading={loadingMoreImg}
+                startContent={!loadingMoreImg && <LoadIcon />}
+                onPress={handleLoadImages}
+              >
+                Cargar mas
+              </Button>
+            </div>
           </div>
         )}
       </div>

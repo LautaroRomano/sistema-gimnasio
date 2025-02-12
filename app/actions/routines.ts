@@ -46,6 +46,7 @@ export const create = async (
 export const getRoutines = async (id: number, date: Date) => {
   try {
     const newDate = new Date(date);
+
     newDate.setHours(newDate.getHours() - 3);
     const startOfDay = new Date(
       Date.UTC(

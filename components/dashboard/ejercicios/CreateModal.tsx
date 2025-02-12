@@ -11,6 +11,7 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { IoMdAdd } from "react-icons/io";
+import { IoReload as LoadIcon } from "react-icons/io5";
 import { toast } from "react-toastify";
 
 import { ExerciseType } from "@/types";
@@ -29,6 +30,8 @@ const initData: ExerciseType = {
 
 type ErrorData = string;
 const errorDataInit: ErrorData = "";
+
+const searchInit: string | null = null;
 
 export default function CreateModal({
   refresh,
@@ -219,8 +222,11 @@ const initDataSelected: InitData = {
 
 function SelectImgModal({ setImg }: { setImg: Function }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [page, setPage] = useState(0);
   const [data, setData] = useState(initDataImages);
   const [selected, setSelected] = useState(initDataSelected);
+  const [loadingMoreImg, setLoadingMoreImg] = useState(false);
+  const [search, setSearch] = useState(searchInit);
 
   const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { value } = target;
@@ -229,8 +235,11 @@ function SelectImgModal({ setImg }: { setImg: Function }) {
   };
 
   const getData = async (search: string | null) => {
-    const res = await getImages(search);
+    setLoadingMoreImg(true);
+    setPage(0);
+    const res = await getImages(search, 0);
 
+    setLoadingMoreImg(false);
     if (res.error) return 0;
     if (!res.success) return 0;
     setData(res.success);
@@ -239,6 +248,45 @@ function SelectImgModal({ setImg }: { setImg: Function }) {
   useEffect(() => {
     if (isOpen) getData(null);
   }, [isOpen]);
+
+  const handleLoadImages = async () => {
+    setLoadingMoreImg(true);
+    const res = await getImages(search, page + 1);
+
+    setPage(page + 1);
+
+    setLoadingMoreImg(false);
+    if (res.error) {
+      toast.error(res.error, {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
+      return;
+    }
+
+    if (!res.success) {
+      toast.error("Ocurrió un error inesperado", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
+      return;
+    }
+    setData([...data, ...res.success]);
+  };
 
   return (
     <>
@@ -270,31 +318,43 @@ function SelectImgModal({ setImg }: { setImg: Function }) {
                     variant="bordered"
                     onChange={handleChange}
                   />
-                  <div className="flex flex-col gap-2 h-[34rem] overflow-y-scroll">
+                  <div className="flex flex-col gap-4 h-[34rem] overflow-y-scroll ">
                     {data.map((image) => {
                       return (
                         <button
                           key={image.id}
-                          className="flex p-2 justify-evenly items-center max-h-24 hover:bg-gray-800 cursor-pointer gap-4"
+                          className="grid grid-cols-3 gap-2 overflow-hidden min-h-20 justify-evenly items-center max-h-24 hover:bg-gray-800 cursor-pointer"
                           onClick={() => {
                             setImg(image.imageUrl);
                             setSelected(image);
                             onClose();
                           }}
                         >
-                          <div className="flex h-full">
+                          <div className="col-span-1 h-full mb-2">
                             <img
                               alt={image.name}
                               className="object-contain   h-full"
                               src={image.imageUrl || ""}
                             />
                           </div>
-                          <div className="flex">
-                            <p className="text-right text-sm">{image.name}</p>
+                          <div className="col-span-2 items-center justify-center h-full">
+                            <p className="text-left text-sm">{image.name}</p>
                           </div>
                         </button>
                       );
                     })}
+
+                    <div className="flex items-center justify-center w-full">
+                      <Button
+                        className="text-black font-semibold"
+                        color="primary"
+                        isLoading={loadingMoreImg}
+                        startContent={!loadingMoreImg && <LoadIcon />}
+                        onPress={handleLoadImages}
+                      >
+                        Cargar mas
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </ModalBody>
